@@ -1,3 +1,5 @@
+#summary How to pack, build, optimize the JS source code by easily making a dojo build.
+
 =Settings for building your own dojo profile=
 
 You can *optimize the performance* of your web application if you use the dojo build
