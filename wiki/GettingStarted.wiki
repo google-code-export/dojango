@@ -29,7 +29,7 @@ Type the following on your console to create an empty django project::
 django-admin.py startproject mysite
 }}}
 
-==Add dojango as app to your project==
+==1. Add dojango as app to your project==
 
 Download the dojango-xxx.tar.gz from the google code page and place it in
 your previously created django project directory and extract it there::
@@ -55,7 +55,7 @@ INSTALLED_APPS = (
 )
 }}}
 
-==Enable the dojango URLs==
+==2. Enable the dojango URLs==
 
 To deliver the media files you also have to add the URL definitions of dojango
 to your main URL defintion file ([mysite project directory]/urls.py)::
