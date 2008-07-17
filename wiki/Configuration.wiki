@@ -33,11 +33,11 @@ is possible out-of-the-box.
 
 All other external (crossdomain builds) just provide the following versions::
 
-  * "1.1.1" - available in profile: aol*, google*
-  * "1.1.0" - available in profile: aol*
-  * "1.0.2" - available in profile: aol*
-  * "1.0.0" - available in profile: aol*
-  * "0.9.0" - available in profile: aol*
+  * "1.1.1" - available in profile: all aol and google versions
+  * "1.1.0" - available in profile: all aol versions
+  * "1.0.2" - available in profile: all aol versions
+  * "1.0.0" - available in profile: all aol versions
+  * "0.9.0" - available in profile: all aol versions
 
 ==DOJANGO_DOJO_PROFILES==
 
@@ -93,7 +93,7 @@ dojo releases.
 With this setting you can define the absolute path to the media files of dojango.
 You have to change that, if you want to modify the dojo build system.
 
-DOJANGO_BASE_DOJO_ROOT (default: DOJANGO_BASE_MEDIA_ROOT + "/dojo")
+===DOJANGO_BASE_DOJO_ROOT (default: DOJANGO_BASE_MEDIA_ROOT + "/dojo")===
 
 Like DOJANGO_BASE_MEDIA_ROOT, but defining the absolute base path to the media
 files of dojo.
