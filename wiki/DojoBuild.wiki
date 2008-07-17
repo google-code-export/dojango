@@ -1,0 +1,80 @@
+=Settings for building your own dojo profile=
+
+You can *optimize the performance* of your web application if you use the dojo build
+system. It compresses your source code by removing comments and whitespace and by replacing your identifiers with shorter ones. You can also combine several dojo files into a single one. Dojango makes the building of a packed release a really simple task; for that the manage command of django was extended and you now can do an easy::
+
+{{{
+./manage.py dojobuild
+}}}
+
+If you call this command, a dojo release will be created in the following directory:
+
+[mysite project directory]/dojango/media/release/[DOJANGO_DOJO_BUILD_VERSION]
+
+After your first build you can use that release within your project by defining the
+following in your project's setting file::
+
+{{{
+DOJANGO_DOJO_PROFILE = "local_release"
+# for details see:
+# * commandline option --build_version
+# * project setting DOJANGO_DOJO_BUILD_VERSION
+DOJANGO_DOJO_VERSION = "your-builded-dojo-version"
+}}}
+
+This command also has several parameters you can use to manipulate the build. With
+appending a dojo build profile name to this command, an other build profile, that is
+defined in the DOJANGO_DOJO_BUILD_PROFILES setting will be used instead of the
+default one ("dojango")::
+
+{{{
+./manage.py dojobuild dojango_optimized
+}}}
+
+A version name for the builded release also could be defined on the commandline like
+that:
+
+{{{
+./manage.py dojobuild --build_version=mysite1.1.1
+}}}
+
+There is also a switch to do a dojo mini build. A mini build is a dojo build, where
+unescessary files, like tests/templates/demos are removed. You can create a dojo mini
+release with dojango by appending ''--minify'' to the dojobuild command::
+
+{{{
+./manage.py dojobuild --minify
+}}}
+
+With the following settings you can manipulate the behavior of the build system
+within your project's settings file::
+
+==DOJANGO_DOJO_BUILD_PROFILE (default: "dojango")==
+
+Dojango provides two example build profiles that you can use immediately.
+Possible values::
+
+  * "dojango"
+  * "dojango_optimized"
+
+==DOJANGO_DOJO_BUILD_VERSION (default: "1.1.1")==
+
+What is the version name of the builded dojo release? You can define any string
+value for that. A recommendation is to name your release with the dojo version and
+a prepended project name. Something like ''mysite1.1.1''.
+
+==DOJANGO_DOJO_BUILD_PROFILES==
+
+You can add your own build profile to dojango with this setting. For details,
+how to define your own build profile, look at ''conf/settings.py''.
+
+Available build profiles::
+
+  * dojango
+  * dojango_optimized
+
+==DOJANGO_DOJO_BUILD_JAVA_EXEC (default: "java")==
+
+What is the commandline call for java? This is needed, if you want to build
+your own dojo release. On some systems you have to set the whole path to the
+java executable.
