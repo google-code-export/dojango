@@ -1,0 +1,83 @@
+#How to install, setup and get the dojango test page running
+
+=Introduction=
+
+Dojango is a reusable django application that helps you to use the client-side
+framework dojo within your django project. It provides capabilites to easily
+switch between several dojo versions and sources (e.g. aol, google, local) and
+delivers helping utilities, that makes the development of rich internet
+applications in combination with dojo more comfortable. Also it makes the building
+of your own packed dojo release easier. Another goal of this project is, that you
+can learn how you have to structure your html to use dojo within your projects.
+
+
+=Start your first dojango driven django project=
+
+This section describes, how you integrate dojango on the basis of a newly
+created django project. Django with at least version >= 0.96.2 must be installed
+before to run dojango successfully. Details how you install django can be found
+here::
+
+http://www.djangoproject.com/download/
+http://www.djangoproject.com/documentation/install/
+
+==Start an empty project==
+
+Type the following on your console to create an empty django project::
+
+{{{
+django-admin.py startproject mysite
+}}}
+
+==Add dojango as app to your project==
+
+Download the dojango-xxx.tar.gz from the google code page and place it in
+your previously created django project directory and extract it there::
+
+{{{
+1. cd [mysite project directory]
+2. tar xzvf dojango-xxx.tar.gz
+}}}
+
+You could also use an actual subversion checkout from::
+
+http://svn.googlecode..........
+
+and place it in your [mysite project directory].
+
+After that you can enable the dojango app by defining the following in your
+project's settings file ([mysite project directory]/settings.py)::
+
+{{{
+INSTALLED_APPS = (
+    ...
+    'dojango',
+)
+}}}
+
+==Enable the dojango URLs==
+
+To deliver the media files you also have to add the URL definitions of dojango
+to your main URL defintion file ([mysite project directory]/urls.py)::
+
+{{{
+urlpatterns = patterns('',
+...
+(r'^dojango/', include('dojango.urls')),
+)
+}}}
+
+Consider, that if you want to set a different base pattern than ''dojango'', you
+should also modify the DOJANGO_BASE_MEDIA_URL setting.
+
+Now you are ready to start your django server::
+
+{{{
+./manage.py runserver
+}}}
+
+Open the dojango test page::
+
+http://localhost:8000/dojango/test/
+
+And enjoy dojo :-)
