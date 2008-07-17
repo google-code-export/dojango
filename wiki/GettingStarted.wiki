@@ -19,6 +19,7 @@ before to run dojango successfully. Details how you install django can be found
 here::
 
 http://www.djangoproject.com/download/
+
 http://www.djangoproject.com/documentation/install/
 
 ==Start an empty project==
