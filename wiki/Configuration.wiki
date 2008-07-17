@@ -1,3 +1,5 @@
+#summary How to configure dojango.
+
 =Configuration of dojango=
 
 Dojango was designed to get started very fast, but you also have the power to configure
