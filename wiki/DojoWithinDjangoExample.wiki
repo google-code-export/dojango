@@ -95,7 +95,7 @@ with the following content::
             {node: "animDiv",
             duration: 1000,
             properties: {fontSize: {end: 10, unit: "px"}}
-        });
+        );
     );
 </script>
 {% endblock %}
