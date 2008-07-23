@@ -53,6 +53,8 @@ with the following content:
 {{{
 {% extends "dojango/base.html" %}
 
+{# setting the <title> attribute #}
+{% block dojango_page_title %}My first dojo page{% endblock %}
 {% block dojango_header_extra %}
 <style type="text/css">
     .box {

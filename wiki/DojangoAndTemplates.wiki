@@ -1,0 +1,163 @@
+#summary Describes how dojango can load its context into your template.
+
+=Dojango and your Django templates=
+
+There are several ways how you can get the *DOJANGO* context into your template
+context. The simplest way, how it was explained in DojoWithinDjangoExample, is to
+extend the *dojango/base.html* template. This document describes, what other
+possibilities you have.
+
+== Using dojo in your templates ==
+
+=== 1. Extending your templates ===
+
+As said above, the easiest way to add dojo to your django application is to extend 
+your templates with the  *dojango/base.html* template. Just do the following in one 
+of your templates:
+
+*Without Internationlization*:
+
+{{{
+	{% extends "dojango/base.html" %}
+}}}
+
+*With Internationalization*:
+
+Note: USE_I18N must be enabled in your project's *settings.py*!
+
+{{{
+	{% extends "dojango/base_i18n.html" %}
+}}}
+
+You then can overwrite the following template blocks within your template:
+
+{{{
+{# setting the head attribute <title> #}
+{% block dojango_page_title %}{% endblock %}{% endblock %}
+{# used to set some additional djConfig definitions (<script type="text/javascript">djConfig['isDebug'] = false;</script>) #}
+{% block dojango_post_dj_config %}{% endblock %}
+{# add your own javascript/css stuff here #}
+{% block dojango_header_extra %}{% endblock %}
+{# and here goes your main page content (in <body> node) #}
+{% block dojango_content %}{% endblock %}
+
+{# if you have to overwrite the <body> element #}
+{# be careful when overwriting this setting, because you also have to set the theme name as class name (e.g class="tundra")}
+{% block _dojango_body %}{% endblock %}
+
+{# just overwrite the following blocks if you really know, what you are doing! #}
+{% block _dojango_html_lang %}{% endblock %}
+{% block _dojango_meta_lang %}{% endblock %}
+{% block _dojango_dj_config %}{% endblock %}
+{% block _dojango_post_dj_config %}{% endblock %}
+{% block _dojango_dojango_config %}{% endblock %}
+{% block _dojango_dojo_styles %}{% endblock %}
+}}}
+
+=== 2. Using an include template ===
+
+For more customization of your html you are also able to use an include template, that 
+prints the main header stuff you need to run dojo. Being more flexible also means, that you
+have to get the dojango context into the template on your own.
+
+There are 2 ways doing that. 
+
+One is using a django context processor, which you can enable in your project's *settings.py*
+like this:
+
+{{{
+TEMPLATE_CONTEXT_PROCESSORS = (
+	...
+	'dojango.context_processors.config',
+)
+}}}
+
+The other way is loading the context in your template via a template tag like this:
+
+{{{
+{% load dojango_base %}
+{% set_dojango_context %}
+}}}
+
+After doing one of these steps, the dojango context is available in the template and you
+now can do your custom html with including the *dojango/include.html* template like this:
+
+{{{
+<html>
+<head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    {% include "dojango/include_i18n.html" %}
+    {# use {% include "dojango/include_i18n.html"%}, if you want to use i18n  #}
+    <script>dojo.require("dijit.Editor");</script>
+</head>
+<body class="{{ DOJANGO.THEME }}">
+   <div dojoType="dijit.Editor">Hello</div>
+</body>
+</html>
+}}}
+
+Of course you are also able to extend the include template on your own, if you
+want to modify the *djConfig* variable that is used to load dojo 
+(http://api.dojotoolkit.org/jsdoc/dojo/HEAD/djConfig).
+
+{{{
+	{% extends "dojango/include.html" %}
+	{% block dojango_post_dj_config %}
+		<script type="text/javascript">
+			djConfig['isDebug'] = false;
+		</script>
+	{% endblock %}
+}}}
+
+=== 3. Do it completely on your own ===
+
+And last but no least you are also able to do a complete customized html file. You should
+look at *dojango/templates/base.html* to see, how you have to enable dojo.
+
+In this case you also have to pass in the dojango context on your own like described in
+''2. Using an include template''. See ''Dojango context variables'' below if you want to know 
+more about the context variables dojango sets in your template context after it was loaded
+via a context processor or via a template tag. 
+
+== Dojango context variables ==
+
+The following context variables are available, if you use the dojango context processor
+or if you use the template tag *set_dojango_context*. They are also on-hand, if you just
+extend from *dojango/base.html*.
+
+|| *Context variable* || Type || *Description* ||
+|| DOJANGO.IS_LOCAL_BUILD || Boolean || Is the used profile a local build? (local_release, local_release_uncompressed) ||
+|| DOJANGO.IS_LOCAL || Boolean || Is a local profile used? (local, local_release, local_release_uncompressed) ||
+|| DOJANGO.UNCOMPRESSED || Boolean || Using a uncompressed version? ||
+|| DOJANGO.USE_GFX || Boolean || Is a special gfx version xd build used? ||
+|| DOJANGO.VERSION || String || Used dojo version. ||
+|| DOJANGO.THEME_CSS_URL || String || The absolute URL to the main theme css file. ||
+|| DOJANGO.BASE_MEDIA_URL || String || The absolute URL to the base URL, where all dojango media files reside (js/css/images). ||
+|| DOJANGO.DOJO_BASE_PATH || String || This is a special path, because it depends if you're using a remote or a local dojo version. It is used for setting *djConfig['baseUrl']*. You need to set it right, if you want to mix a remote xd build with your own local module namespace. But don't care, dojango sets that for you! ||
+|| DOJANGO.DOJO_URL || String || The absolute URL to the *dojo* main directory. ||
+|| DOJANGO.DIJIT_URL || String || The absolute URL to the *dijit* main directory. ||
+|| DOJANGO.DOJOX_URL || String || The absolute URL to the *dojox* main directory. ||
+|| DOJANGO.DOJO_SRC_FILE || String || The absolute URL to the dojo src file (.../*dojo.js*, .../*dojo.xd.js*, ...) ||
+|| DOJANGO.DOJANGO_SRC_FILE || String || The absolute URL to the dojango src file (.../*dojango.js*) ||
+|| DOJANGO.DEBUG || Boolean || Should dojo be run in debug mode? See DOJANGO_DOJO_DEBUG in [Configuration] ||
+
+=== Manipulating the dojango context in your template ===
+
+Sometimes you want to use a special version of dojo within one of your templates. You simply can
+do this by passing additional parameters to the *set_dojango_context* template tag.
+
+The following definition loads dojo version 0.9 from aol:
+
+{{{
+	{% set_dojango_context "aol" "0.9.0" %}
+}}}
+
+Or do a simple:
+
+{{{
+	{% set_dojango_context "google" }
+}}}
+
+if you want dojo to be served from google in the currently defined *DOJANGO_DOJO_VERSION*.
+
+See [Configuration] for all available profiles and versions.
