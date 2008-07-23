@@ -1,0 +1,30 @@
+#summary How to add your own dojo source version and to enable custom builds.
+
+=Add a dojo source version to dojango=
+
+This document describes, what steps you have to take to enable the local dojango
+profile that is using a source version of dojo. After performing the following steps 
+you are also able doing your own DojoBuild. 
+
+The description is based on the dojo version 1.1.1 and that you've successfully added 
+dojango to your django project with the instructions from GettingStarted.
+
+{{{
+	wget http://download.dojotoolkit.org/release-1.1.1/dojo-release-1.1.1-src.tar.gz
+	# or curl http://download.dojotoolkit.org/release-1.1.1/dojo-release-1.1.1-src.tar.gz
+	tar xzvf dojo-release-1.1.1-src.tar.gz
+	mv dojo-release-1.1.1-src/* mysite/dojango/media/dojo/1.1.1/
+	rm -r dojo-release-1.1.1-src*
+}}}
+
+Now you can enable this local dojo source version by defining the following in your 
+*mysite/settings.py*:
+
+{{{
+DOJANGO_DOJO_PROFILE = 'local'
+# This version setting is optional! Currently 1.1.1 is the default for that.
+# Just showing, how to enable your own dojo source version
+DOJANGO_DOJO_VERSION = '1.1.1'
+}}}
+
+You are now also able to build your own dojo release (see DojoBuild).
