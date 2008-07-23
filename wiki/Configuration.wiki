@@ -4,7 +4,7 @@
 
 Dojango was designed to get started very fast, but you also have the power to configure
 everything on your own (just if you really want to :-)). All the definitions below
-can be set in your project's ''settings.py'' file:
+can be set in your project's *settings.py* file:
 
 ==DOJANGO_DOJO_PROFILE (default "aol")==
 
@@ -61,8 +61,6 @@ and there you can look at the dojo theme structure, e.g.:
   _dojo base url_/dijit/themes/tundra
 
   _dojo base url_/dijit/themes/tundra/tundra.css
-
-  ...
 
 ==DOJANGO_DOJO_DEBUG (default: settings.DEBUG)==
 
