@@ -26,7 +26,7 @@ This setting defines the dojo version that should be used within dojango. For th
 version you can pass in any value, because dojango tries to get a local version from
 the following directory:
 
-  _django project directory_/dojango/media/dojo/_DOJANGO_DOJO_VERSION_
+  *django project directory*/dojango/media/dojo/*DOJANGO_DOJO_VERSION*
 
 At the moment dojango is packed with dojo version 1.1.1 so that a local build process
 is possible out-of-the-box.
@@ -58,11 +58,11 @@ Here you can define the dojo theme, that should be used. Possible values:
 You can set your own theme base URL. It defaults to _dojo base url_/dijit/themes
 and there you can look at the dojo theme structure, e.g.:
 
-{{{
-_dojo base url_/dijit/themes/tundra
-_dojo base url_/dijit/themes/tundra/tundra.css
-...
-}}}
+  _dojo base url_/dijit/themes/tundra
+
+  _dojo base url_/dijit/themes/tundra/tundra.css
+
+  ...
 
 ==DOJANGO_DOJO_DEBUG (default: settings.DEBUG)==
 
