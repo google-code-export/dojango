@@ -28,10 +28,9 @@ the following directory:
 
   _*django project directory*_/dojango/media/dojo/_*DOJANGO_DOJO_VERSION*_
 
-At the moment dojango is packed with dojo version 1.1.1 so that a local build process
-is possible out-of-the-box.
+If you want to use a version of the profiles local or local_release you first have to download a dojo version and place it in the above mentioned directory. For details how to do this see DojoBuild.
 
-All other external (crossdomain builds) just provide the following versions:
+All other external (crossdomain) builds provide the following versions:
 
   * "1.1.1" - available in profile: all aol and google profiles
   * "1.1.0" - available in profile: all aol profiles
