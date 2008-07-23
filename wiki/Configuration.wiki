@@ -4,11 +4,11 @@
 
 Dojango was designed to get started very fast, but you also have the power to configure
 everything on your own (just if you really want to :-)). All the definitions below
-can be set in your project's ''settings.py'' file::
+can be set in your project's ''settings.py'' file:
 
 ==DOJANGO_DOJO_PROFILE (default "aol")==
 
-Sets the dojango profile, that should be used within the dojango context. Possible values::
+Sets the dojango profile, that should be used within the dojango context. Possible values:
 
   * "aol" (default)
   * "aol_uncompressed"
@@ -24,20 +24,20 @@ Sets the dojango profile, that should be used within the dojango context. Possib
 
 This setting defines the dojo version that should be used within dojango. For the local
 version you can pass in any value, because dojango tries to get a local version from
-the following directory::
+the following directory:
 
-[mysite project directory]/dojango/media/dojo/[DOJANGO_DOJO_VERSION]
+    `django project directory`/dojango/media/dojo/`DOJANGO_DOJO_VERSION`
 
 At the moment dojango is packed with dojo version 1.1.1 so that a local build process
 is possible out-of-the-box.
 
-All other external (crossdomain builds) just provide the following versions::
+All other external (crossdomain builds) just provide the following versions:
 
-  * "1.1.1" - available in profile: all aol and google versions
-  * "1.1.0" - available in profile: all aol versions
-  * "1.0.2" - available in profile: all aol versions
-  * "1.0.0" - available in profile: all aol versions
-  * "0.9.0" - available in profile: all aol versions
+  * "1.1.1" - available in profile: all aol and google profiles
+  * "1.1.0" - available in profile: all aol profiles
+  * "1.0.2" - available in profile: all aol profiles
+  * "1.0.0" - available in profile: all aol profiles
+  * "0.9.0" - available in profile: all aol profiles
 
 ==DOJANGO_DOJO_PROFILES==
 
@@ -47,7 +47,7 @@ profile.
 
 ==DOJANGO_DOJO_THEME (default: "tundra")==
 
-Here you can define the dojo theme, that should be used. Possible values::
+Here you can define the dojo theme, that should be used. Possible values:
 
   * "tundra"
   * "soria"
@@ -55,18 +55,18 @@ Here you can define the dojo theme, that should be used. Possible values::
 
 ==DOJANGO_DOJO_THEME_URL (defaults to the dijit theme URL)==
 
-You can set your own theme base URL. It defaults to [dojo base url]/dijit/themes
-and there you can look at the dojo theme structure, e.g.::
+You can set your own theme base URL. It defaults to `dojo base url`/dijit/themes
+and there you can look at the dojo theme structure, e.g.:
 
-[dojo base url]/dijit/themes/tundra
-[dojo base url]/dijit/themes/tundra/tundra.css
-...
+  `dojo base url`/dijit/themes/tundra
+  `dojo base url`/dijit/themes/tundra/tundra.css
+  ...
 
 
 ==DOJANGO_DOJO_DEBUG (default: settings.DEBUG)==
 
 Turning dojo into debug mode. The standard is using the DEBUG setting of your
-django project. Possible values::
+django project. Possible values:
 
   * True
   * False
@@ -88,7 +88,7 @@ release will be available there in a directory with the name of the builded vers
 See ''Settings for building your own dojo profile'' for details about building
 dojo releases.
 
-===DOJANGO_BASE_MEDIA_ROOT (default: [mysite project directory]/dojango/media)===
+===DOJANGO_BASE_MEDIA_ROOT (default: `django project directory`/dojango/media)===
 
 With this setting you can define the absolute path to the media files of dojango.
 You have to change that, if you want to modify the dojo build system.
