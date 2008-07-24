@@ -18,7 +18,7 @@ of your templates:
 *Without Internationlization*:
 
 {{{
-	{% extends "dojango/base.html" %}
+{% extends "dojango/base.html" %}
 }}}
 
 *With Internationalization*:
@@ -26,7 +26,7 @@ of your templates:
 Note: USE_I18N must be enabled in your project's *settings.py*!
 
 {{{
-	{% extends "dojango/base_i18n.html" %}
+{% extends "dojango/base_i18n.html" %}
 }}}
 
 You then can overwrite the following template blocks within your template:
@@ -67,8 +67,8 @@ like this:
 
 {{{
 TEMPLATE_CONTEXT_PROCESSORS = (
-	...
-	'dojango.context_processors.config',
+    ...
+    'dojango.context_processors.config',
 )
 }}}
 
@@ -101,12 +101,12 @@ want to modify the *djConfig* variable that is used to load dojo
 (http://api.dojotoolkit.org/jsdoc/dojo/HEAD/djConfig).
 
 {{{
-	{% extends "dojango/include.html" %}
-	{% block dojango_post_dj_config %}
-		<script type="text/javascript">
-			djConfig['isDebug'] = false;
-		</script>
-	{% endblock %}
+{% extends "dojango/include.html" %}
+{% block dojango_post_dj_config %}
+    <script type="text/javascript">
+        djConfig['isDebug'] = false;
+    </script>
+{% endblock %}
 }}}
 
 === 3. Do it completely on your own ===
@@ -149,13 +149,13 @@ do this by passing additional parameters to the *set_dojango_context* template t
 The following definition loads dojo version 0.9 from aol:
 
 {{{
-	{% set_dojango_context "aol" "0.9.0" %}
+{% set_dojango_context "aol" "0.9.0" %}
 }}}
 
 Or do a simple:
 
 {{{
-	{% set_dojango_context "google" }
+{% set_dojango_context "google" }
 }}}
 
 if you want dojo to be served from google in the currently defined *DOJANGO_DOJO_VERSION*.
