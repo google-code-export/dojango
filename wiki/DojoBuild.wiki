@@ -75,6 +75,10 @@ Available build profiles:
   * dojango
   * dojango_optimized
 
+==DOJANGO_DOJO_BUILD_PROFILES_DEFAULT==
+
+We mixin this dictionary to each DOJANGO_DOJO_BUILD_PROFILES element. Normally these values stay the same, so they don't have to changed for each dojo build profile.
+
 ==DOJANGO_DOJO_BUILD_JAVA_EXEC (default: "java")==
 
 What is the commandline call for java? This is needed, if you want to build
