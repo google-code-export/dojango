@@ -1,28 +1,47 @@
 #summary How to pack, build, optimize the JS source code by easily making a dojo build.
 
-=Settings for building your own dojo profile=
+=Why create a build?=
 
-You can *optimize the performance* of your web application if you use the dojo build
-system. It compresses your source code by removing comments and whitespace and by replacing your identifiers with shorter ones. You can also combine several dojo files into a single one. Dojango makes the building of a packed release a really simple task; for that the manage command of django was extended and you now can do an easy:
+Speed, speed and speed. Your users will be thankful! Dojo comes with a built in build system that 
+ * shrinks your javascript files by removing unnecessary spaces, comments and by shortening variable names if possible
+ * concatenate multiple javascript files together to reduce the HTTP traffic
+ * shrink and concatenate CSS files
+ * interning HTML template files (the dojo widget system uses external HTML template files for easier maintenance). 
+You can really *optimize the performance* of your web application if you use the dojo build system.
+
+For loading dojo you need:
+|| *Build command* || *dojo.js size* || *loading _/dojango/test/_* || *release directory size* || *What is included in dojo.js*||
+||no build ||5 kB ||7s, 193 requests (114 JS, 23 CSS) ||34 MB ||Just a small stub dojo.js, that triggers a lot of AJAX requests to load javascript files ||
+||{{{./manage.py dojobuild dojango}}} ||81 kB (275 kB uncompressed)||4s, 118 requests (89 JS, 2 CSS) ||16 MB ||dojo core ||
+||{{{./manage.py dojobuild dojango --minify}}} ||81 kB  (275 kB uncompressed)||4s, 118 requests (89 JS, 2 CSS) ||7.7 MB ||dojo core ||
+||{{{./manage.py dojobuild dojango_optimized}}} ||419 kB (992 kB uncompressed)||2s, 32 requests (3 JS, 2 CSS) ||18 MB ||dojo core, dijit-all ||
+||{{{./manage.py dojobuild dojango_optimized --minify}}} ||419 kB (992 kB uncompressed)||2s, 32 requests (3 JS, 2 CSS) ||8.6 MB ||dojo core, dijit-all ||
+
+=How to create a build?=
+
+Using: *mysite/dojango/media/dojango.profile.js*
+Size: 
+Dojango makes the building of a packed release a really simple task; for that the manage command of django was extended and you now can get a build as easy as that:
 
 {{{
 ./manage.py dojobuild
 }}}
 
-If you call this command, a dojo release will be created in the following directory:
+If you call this command, a dojo release will be created in the directory 
 
-[mysite project directory]/dojango/media/release/[DOJANGO_DOJO_BUILD_VERSION]
+*mysite/dojango/media/release/dojango*
 
 After your first build you can use that release within your project by defining the
-following in your project's setting file:
+following in your project's *setting.py* file:
 
 {{{
 DOJANGO_DOJO_PROFILE = "local_release"
-# for details see:
-# * commandline option --build_version
-# * project setting DOJANGO_DOJO_BUILD_VERSION
-DOJANGO_DOJO_VERSION = "your-builded-dojo-version"
 }}}
+
+This build is actually only interning all the dojo base libraries and the dojo parser (which is responsible for triggering the widget creation after the page load).
+If you want to customize your build and add the files you need this is teh best starting point!
+
+=Optimized dojango build=
 
 This command also has several parameters you can use to manipulate the build. With
 appending a dojo build profile name to this command, an other build profile, that is
