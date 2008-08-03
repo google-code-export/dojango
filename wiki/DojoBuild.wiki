@@ -11,25 +11,23 @@ You can really *optimize the performance* of your web application if you use the
 
 For loading dojo you need:
 || *Build command* || *dojo.js size* || *loading _/dojango/test/_* || *release directory size* || *What is included in dojo.js*||
-||no build ||5 kB ||7s, 193 requests (114 JS, 23 CSS) ||34 MB ||Just a small stub dojo.js, that triggers a lot of AJAX requests to load javascript files ||
-||{{{./manage.py dojobuild dojango}}} ||81 kB (275 kB uncompressed)||4s, 118 requests (89 JS, 2 CSS) ||16 MB ||dojo core ||
-||{{{./manage.py dojobuild dojango --minify}}} ||81 kB  (275 kB uncompressed)||4s, 118 requests (89 JS, 2 CSS) ||7.7 MB ||dojo core ||
-||{{{./manage.py dojobuild dojango_optimized}}} ||419 kB (992 kB uncompressed)||2s, 32 requests (3 JS, 2 CSS) ||18 MB ||dojo core, dijit-all ||
-||{{{./manage.py dojobuild dojango_optimized --minify}}} ||419 kB (992 kB uncompressed)||2s, 32 requests (3 JS, 2 CSS) ||8.6 MB ||dojo core, dijit-all ||
+||no build ||5 kB ||~7s, 193 requests (114 JS, 23 CSS) ||34 MB ||Just a small stub dojo.js, that triggers a lot of AJAX requests to load javascript files ||
+||{{{./manage.py dojobuild dojango}}} ||81 kB (275 kB uncompressed)||~4s, 118 requests (89 JS, 2 CSS) ||16 MB ||dojo core ||
+||{{{./manage.py dojobuild dojango --minify}}} ||81 kB  (275 kB uncompressed)||~4s, 118 requests (89 JS, 2 CSS) ||7.7 MB ||dojo core ||
+||{{{./manage.py dojobuild dojango_optimized}}} ||419 kB (992 kB uncompressed)||~2s, 32 requests (3 JS, 2 CSS) ||18 MB ||dojo core, dijit-all ||
+||{{{./manage.py dojobuild dojango_optimized --minify}}} ||419 kB (992 kB uncompressed)||~2s, 32 requests (3 JS, 2 CSS) ||8.6 MB ||dojo core, dijit-all ||
 
 =How to create a build?=
 
-Using: *mysite/dojango/media/dojango.profile.js*
-Size: 
 Dojango makes the building of a packed release a really simple task; for that the manage command of django was extended and you now can get a build as easy as that:
 
 {{{
 ./manage.py dojobuild
 }}}
 
-If you call this command, a dojo release will be created in the directory 
+If you call this command, a dojo release will be created. This dojo release, as you can see in the table above will contain the dojo core library. There are no widgets or UI things included yet. It will be stored in the directory 
 
-*mysite/dojango/media/release/dojango*
+*mysite/dojango/media/release/dojango-with-dojo1.1.1*
 
 After your first build you can use that release within your project by defining the
 following in your project's *setting.py* file:
@@ -38,34 +36,38 @@ following in your project's *setting.py* file:
 DOJANGO_DOJO_PROFILE = "local_release"
 }}}
 
-This build is actually only interning all the dojo base libraries and the dojo parser (which is responsible for triggering the widget creation after the page load).
-If you want to customize your build and add the files you need this is teh best starting point!
+This build is actually interning all the dojo core libraries and the dojo parser (which is responsible for triggering the widget creation after the page load).
+If you want to customize your build and add your files this is the best starting point!
 
-=Optimized dojango build=
+=Optimized and minified dojango build=
 
-This command also has several parameters you can use to manipulate the build. With
-appending a dojo build profile name to this command, an other build profile, that is
-defined in the DOJANGO_DOJO_BUILD_PROFILES setting will be used instead of the
-default one ("dojango"):
+The {{{./manage.py dojobuild}}} command also has several parameters you can use to customize the build. By appending a dojo build profile name to this command, another build profile, as defined in the DOJANGO_DOJO_BUILD_PROFILES setting will be used instead of the default one ("dojango").
+As shown in the table above, there is an optimized build, that interns even more dojo stuff, one of them being all the widget namespace (dijit.*), those are things like ComboBoxes, Tree, Layout manager, various form elements, and much more.
+Use the following command to create this build:
 
 {{{
 ./manage.py dojobuild dojango_optimized
 }}}
 
-A version name for the builded release also could be defined on the commandline like
-that:
+A name for the built release also could be defined on the commandline like that:
 
 {{{
 ./manage.py dojobuild --build_version=mysite1.1.1
 }}}
 
+That will generate all the built files into:
+
+*mysite/dojango/media/release/mysite1.1.1*
+
 There is also a switch to do a dojo mini build. A mini build is a dojo build, where
-unescessary files, like tests/templates/demos are removed. You can create a dojo mini
+unescessary files, like tests, templates and demos are removed. You can create a dojo mini
 release with dojango by appending ''--minify'' to the dojobuild command:
 
 {{{
 ./manage.py dojobuild --minify
 }}}
+
+=Customize your build=
 
 With the following settings you can manipulate the behavior of the build system
 within your project's settings file:
