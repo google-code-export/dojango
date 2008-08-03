@@ -42,14 +42,14 @@ If you want to customize your build and add your files this is the best starting
 =Optimized and minified dojango build=
 
 The {{{./manage.py dojobuild}}} command also has several parameters you can use to customize the build. By appending a dojo build profile name to this command, another build profile, as defined in the DOJANGO_DOJO_BUILD_PROFILES setting will be used instead of the default one ("dojango").
-As shown in the table above, there is an optimized build, that interns even more dojo stuff, one of them being all the widget namespace (dijit.*), those are things like ComboBoxes, Tree, Layout manager, various form elements, and much more.
+As shown in the table above, there is an optimized build, that interns even more dojo stuff, one of them being all the widget namespace (dijit.*), those are things like combo boxes, tree, layout manager, various form elements, and much more.
 Use the following command to create this build:
 
 {{{
 ./manage.py dojobuild dojango_optimized
 }}}
 
-A name for the built release also could be defined on the command line like that:
+A name for the built release can also be defined on the command line like that:
 
 {{{
 ./manage.py dojobuild --build_version=mysite1.1.1
