@@ -49,7 +49,7 @@ Use the following command to create this build:
 ./manage.py dojobuild dojango_optimized
 }}}
 
-A name for the built release also could be defined on the commandline like that:
+A name for the built release also could be defined on the command line like that:
 
 {{{
 ./manage.py dojobuild --build_version=mysite1.1.1
