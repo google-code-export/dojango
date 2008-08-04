@@ -34,6 +34,7 @@ following in your project's *setting.py* file:
 
 {{{
 DOJANGO_DOJO_PROFILE = "local_release"
+DOJANGO_DOJO_VERSION = "dojango-with-dojo1.1.1"
 }}}
 
 This build is actually interning all the dojo core libraries and the dojo parser (which is responsible for triggering the widget creation after the page load).
