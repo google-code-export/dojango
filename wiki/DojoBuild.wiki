@@ -1,4 +1,4 @@
-#summary How to pack, build, optimize the JS source code by easily making a dojo build.
+#summary Help - How to pack, build, optimize the JS source code by easily making a dojo build.
 
 =Why create a build?=
 
