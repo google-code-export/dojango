@@ -1,8 +1,8 @@
-#summary What is the plan for the future, what is coming up next.
+#summary Project - What is the plan for the future, what is coming up next.
 
 = Road map for 0.3.* releases =
 
-* add various helper functions that makes it easier to let the two interact, js and python, whatever is needed, one thing we have up the sleeve is dojango.send() that wraps the xhr-post request and adds some higher level features to it, that will become the base for some more dedicated ajax communication
+ * add various helper functions that makes it easier to let the two interact, js and python, whatever is needed, one thing we have up the sleeve is dojango.send() that wraps the xhr-post request and adds some higher level features to it, that will become the base for some more dedicated ajax communication
 
 = Plans for 0.4 =
 
