@@ -1,4 +1,4 @@
-#summary How to install, setup and get the dojango test page running - in only two steps!
+#summary Help - How to install, setup and get the dojango test page running - in only two steps!
 
 =Introduction=
 
