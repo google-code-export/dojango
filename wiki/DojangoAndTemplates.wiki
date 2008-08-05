@@ -1,4 +1,4 @@
-#summary Describes how dojango can load its context into your template.
+#summary Help - Describes how dojango can load its context into your template.
 
 =Dojango and your Django templates=
 
