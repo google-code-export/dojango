@@ -1,4 +1,4 @@
-#summary How to configure dojango.
+#summary Help - How to configure dojango.
 
 =Configuration of dojango=
 
