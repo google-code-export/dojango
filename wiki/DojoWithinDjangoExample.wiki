@@ -1,4 +1,4 @@
-#summary An example django page using dojo.
+#summary Help - An example django page using dojo.
 
 =Using dojo in your django pages=
 
