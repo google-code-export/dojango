@@ -1,4 +1,4 @@
-#summary How to add your own dojo source version and to enable custom builds.
+#summary Help - How to add your own dojo source version and to enable custom builds.
 
 =Add a dojo source version to dojango=
 
