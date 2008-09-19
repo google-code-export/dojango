@@ -33,7 +33,7 @@ You then can overwrite the following template blocks within your template:
 
 {{{
 {# setting the head attribute <title> #}
-{% block dojango_page_title %}{% endblock %}{% endblock %}
+{% block dojango_page_title %}{% endblock %}
 {# used to set some additional djConfig definitions (<script type="text/javascript">djConfig['isDebug'] = false;</script>) #}
 {% block dojango_post_dj_config %}{% endblock %}
 {# add your own javascript/css stuff here #}
