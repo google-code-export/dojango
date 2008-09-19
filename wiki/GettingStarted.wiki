@@ -14,7 +14,7 @@ can learn how you have to structure your html to use dojo within your projects.
 =Start your first dojango driven django project=
 
 This section describes, how you integrate dojango on the basis of a newly
-created django project. Django with at least version >= 0.96.2 must be installed
+created django project. Django with at least version >= 1.0 must be installed
 before to run dojango successfully. Details how you install django can be found
 here:
 
