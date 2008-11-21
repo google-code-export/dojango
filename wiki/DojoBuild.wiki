@@ -21,7 +21,7 @@ For loading dojo you need:
 
 =How to create a build?=
 
-Before starting your own build you first have to download a dojo source build and place it within dojango. See AddDojoSource for details.
+Before starting your own build you first have to download a dojo source package and place it within dojango. See AddDojoSource for details.
 
 Dojango makes the building of a packed release a really simple task; for that the manage command of django was extended and you now can get a build as easy as that:
 
