@@ -69,6 +69,18 @@ django project. Possible values:
   * True
   * False
 
+==DOJANGO_DOJO_SECURE_JSON (default: True)==
+
+Defines if the json response (used in dojango decorators / utility functions) should
+be prepended with:
+
+  {}&&\n
+
+This is the recommendation of Dojo in version 1.2.0. Possible values:
+
+  * True
+  * False
+
 ==Several advanced settings for some URLs and paths==
 
 Be careful if you modify the following settings. You really should know what you
