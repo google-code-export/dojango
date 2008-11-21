@@ -1,8 +1,8 @@
 #summary Help - How to configure dojango.
 
-=Configuration of dojango=
-
 *Note: This page refers to the latest version from SVN trunk*, to see this page [http://code.google.com/p/dojango/source/browse/wiki/Configuration.wiki?r=36 for the downloadable dojango-0.3 version please go here]!
+
+=Configuration of dojango=
 
 Dojango was designed to get started very fast, but you also have the power to configure
 everything on your own (just if you really want to :-)). All the definitions below
@@ -34,6 +34,7 @@ If you want to use a version of the profiles local or local_release you first ha
 
 All other external (crossdomain) builds provide the following versions:
 
+  * "1.2.0" - available in profile: all aol and google profiles
   * "1.1.1" - available in profile: all aol and google profiles
   * "1.1.0" - available in profile: all aol profiles
   * "1.0.2" - available in profile: all aol profiles
