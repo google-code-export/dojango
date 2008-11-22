@@ -34,7 +34,7 @@ If you want to use a version of the profiles local or local_release you first ha
 
 All other external (crossdomain) builds provide the following versions:
 
-  * "1.2.0" - available in profile: all aol and google profiles
+  * "1.2.0" - available in profile: aol, aol_compressed and google profiles
   * "1.1.1" - available in profile: all aol and google profiles
   * "1.1.0" - available in profile: all aol profiles
   * "1.0.2" - available in profile: all aol profiles
