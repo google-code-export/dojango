@@ -19,7 +19,7 @@ For loading dojo you need:
 ||{{{./manage.py dojobuild dojango --minify_extreme}}} ||81 kB ||page would not work, because dojo.require would fail! ||1.9 MB ||dojo core ||
 ||{{{./manage.py dojobuild dojango_optimized}}} ||419 kB (992 kB uncompressed)||~2s, 32 requests (3 JS, 2 CSS) ||18 MB ||dojo core, dijit-all ||
 ||{{{./manage.py dojobuild dojango_optimized --minify}}} ||419 kB (992 kB uncompressed)||~2s, 32 requests (3 JS, 2 CSS) ||8.6 MB ||dojo core, dijit-all ||
-||{{{./manage.py dojobuild dojango_optimized --minify_extreme}}} ||419 kB ||just small parts of the page would not work (because some 3 dojo.require calls can't be resolved!) ||2.2 MB ||dojo core, dijit-all ||
+||{{{./manage.py dojobuild dojango_optimized --minify_extreme}}} ||419 kB ||just small parts of the page would not work (because 3 dojo.require calls can't be resolved!) ||2.2 MB ||dojo core, dijit-all ||
 
 =How to create a build?=
 
@@ -95,11 +95,15 @@ Possible values:
   * "dojango"
   * "dojango_optimized"
 
-==DOJANGO_DOJO_BUILD_VERSION (default: "1.1.1")==
+==DOJANGO_DOJO_BUILD_VERSION (default: "1.2.0")==
 
 What is the version name of the builded dojo release? You can define any string
 value for that. A recommendation is to name your release with the dojo version and
-a prepended project name. Something like ''mysite1.1.1''.
+a prepended project name. Something like ''mysite1.2.0''.
+
+==DOJANGO_DOJO_BUILD_USED_VERSION (default: "1.2.0")==
+
+This setting determines, how the dojango build system is doing the minification. Since Dojo version 1.2.0 the minification is done by JavaScript and not by a shell script. Normally you don't have to change that setting if you use a current version (>= 1.2.0) of dojo.
 
 ==DOJANGO_DOJO_BUILD_PROFILES==
 
