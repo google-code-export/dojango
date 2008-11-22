@@ -19,7 +19,7 @@ For loading dojo you need:
 ||{{{./manage.py dojobuild dojango --minify_extreme}}} ||81 kB ||page would not work, because dojo.require would fail! ||1.9 MB ||dojo core ||
 ||{{{./manage.py dojobuild dojango_optimized}}} ||419 kB (992 kB uncompressed)||~2s, 32 requests (3 JS, 2 CSS) ||18 MB ||dojo core, dijit-all ||
 ||{{{./manage.py dojobuild dojango_optimized --minify}}} ||419 kB (992 kB uncompressed)||~2s, 32 requests (3 JS, 2 CSS) ||8.6 MB ||dojo core, dijit-all ||
-||{{{./manage.py dojobuild dojango_optimized --minify_extreme}}} ||419 kB ||just small parts of the page would not work (because some requires are not in the profile! ||2.2 MB ||dojo core, dijit-all ||
+||{{{./manage.py dojobuild dojango_optimized --minify_extreme}}} ||419 kB ||just small parts of the page would not work (because some 3 dojo.require calls can't be resolved!) ||2.2 MB ||dojo core, dijit-all ||
 
 =How to create a build?=
 
@@ -73,6 +73,14 @@ release with dojango by appending ''--minify'' to the dojobuild command:
 {{{
 ./manage.py dojobuild --minify
 }}}
+
+Now there is also the possibility doing an extreme minification. This is accomplished with this dojobuild command:
+
+{{{
+./manage.py dojobuild --minify_extreme
+}}}
+
+With this option you have to care on your own, that all dojo modules that are needed in your web application are included within your build profile, because all other js files than {{{dojo.js}}} will be removed. So a {{{dojo.require}}} on dojo modules that aren't included in the build would fail. You also have to care about building your own cumulated css file by defining an extra layer within your build profile. There is a good video tutorial by Pete Higgins about that topic on http://dojocampus.org/content/2008/05/26/dojo-build-201-layers-and-css-optimizing-builds/
 
 =Customize your build=
 
