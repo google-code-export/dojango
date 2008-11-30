@@ -80,7 +80,7 @@ Now there is also the possibility doing an extreme minification. This is accompl
 ./manage.py dojobuild --minify_extreme
 }}}
 
-With this option you have to care on your own, that all dojo modules that are needed in your web application are included within your build profile, because all other js files than {{{dojo.js}}} will be removed. So a {{{dojo.require}}} on dojo modules that aren't included in the build would fail. You also have to care about building your own cumulated css file by defining an extra layer within your build profile. There is a good video tutorial by Pete Higgins about that topic on http://dojocampus.org/content/2008/05/26/dojo-build-201-layers-and-css-optimizing-builds/
+With this option you have to care on your own, that all dojo modules that are needed in your web application are included within your build profile, because all other js files than {{{dojo.js}}} will be removed. So a {{{dojo.require}}} on dojo modules that aren't included in the build would fail. 
 
 =Customize your build=
 
