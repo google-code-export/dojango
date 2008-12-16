@@ -50,3 +50,9 @@ Now you are ready to add your app to AppEngine. Start you AppEngineLauncher and 
 You should see a picture like this:
 
 http://static.uxebu.com/img/dojango_appengine.png
+
+By pressing the button *Deploy* your application will be uploaded and will be available on:
+
+http://my-appengine.appspot.com/dojango/test/
+
+You then develop your django app as usual and deploy your changes to AppEngine whenever you want to.
