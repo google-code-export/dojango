@@ -16,7 +16,7 @@ For loading dojo you need:
 ||no build ||5 kB ||~7s, 193 requests (114 JS, 23 CSS) ||34 MB ||Just a small stub dojo.js, that triggers a lot of AJAX requests to load javascript files ||
 ||{{{./manage.py dojobuild dojango}}} ||81 kB (275 kB uncompressed)||~4s, 118 requests (89 JS, 2 CSS) ||16 MB ||dojo core ||
 ||{{{./manage.py dojobuild dojango --minify}}} ||81 kB  (275 kB uncompressed)||~4s, 118 requests (89 JS, 2 CSS) ||7.7 MB ||dojo core ||
-||{{{./manage.py dojobuild dojango --minify_extreme}}} ||81 kB ||dojo.require fails on several files, because every used module must be added build profile! ||2.7 MB ||dojo core ||
+||{{{./manage.py dojobuild dojango --minify_extreme}}} ||81 kB ||dojo.require fails on several files, because every used module must be added to the build profile! ||2.7 MB ||dojo core ||
 ||{{{./manage.py dojobuild dojango_optimized}}} ||419 kB (992 kB uncompressed)||~2s, 32 requests (3 JS, 2 CSS) ||18 MB ||dojo core, dijit-all ||
 ||{{{./manage.py dojobuild dojango_optimized --minify}}} ||419 kB (992 kB uncompressed)||~2s, 32 requests (3 JS, 2 CSS) ||8.6 MB ||dojo core, dijit-all ||
 ||{{{./manage.py dojobuild dojango_optimized --minify_extreme}}} ||419 kB ||~2s, 32 requests (3 JS, 2 CSS) ||3.7 MB ||dojo core, dijit-all ||
