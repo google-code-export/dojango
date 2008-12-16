@@ -4,7 +4,11 @@
 
 This little tutorial helps you to get dojango up on Google AppEngine.
 
-First you need to get [http://code.google.com/p/google-app-engine-django/ Google AppEngine Helper] and extract it somewhere:
+Before you start with this, you should get and install the AppEngine SDK:
+
+http://code.google.com/intl/de-DE/appengine/downloads.html
+
+Afterwards you need to get [http://code.google.com/p/google-app-engine-django/ Google AppEngine Helper] and extract it somewhere:
 
 {{{
 cd ~
@@ -42,3 +46,7 @@ skip_files: |
 }}}
 
 Now you are ready to add your app to AppEngine. Start you AppEngineLauncher and add your newly created dojango AppEngine project to it by selecting File -> Add Existing Project and let it point to your newly created folder.
+
+You should see a picture like this:
+
+http://static.uxebu.com/img/dojango_appengine.png
