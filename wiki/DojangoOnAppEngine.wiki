@@ -1,0 +1,44 @@
+#summary Help - How to deploy your dojango powered app to Google's AppEngine
+
+=Running dojango on AppEngine=
+
+This little tutorial helps you to get dojango up on Google AppEngine.
+
+First you need to get [http://code.google.com/p/google-app-engine-django/ Google AppEngine Helper] and extract it somewhere:
+
+{{{
+cd ~
+wget http://google-app-engine-django.googlecode.com/files/appengine_helper_for_django-r52.zip
+unzip appengine_helper_for_django-r52.zip
+# renaming the extracted folder to your appengine name (just a recommendation)
+mv appengine_helper_for_django my-appengine
+}}}
+
+Now go to that directory and do the same steps as in the GettingStarted guide, but starting with step with *1. Add dojango as app to your project*. The AppEngine helper for django already contains a simple django project mixed with files needed by AppEngine.
+
+To suit the helper to your needs, you have to set the application name, define, which files should be served statically and which files should be skipped when synching to AppEngine in your *app.yaml*:
+
+{{{
+# set the right name of your AppEngine
+# you need to have permissions on my-appengine.appspot.com 
+application: my-appengine
+version: 1
+runtime: python
+api_version: 1
+
+handlers:
+- url: /dojango/media
+  static_dir: dojango/media
+
+- url: /.*
+  script: main.py
+
+skip_files: |
+  ^(.*/)?(
+  (dojango/media/dojo/.*)|
+  (\.pyc)|
+  (\..*)|
+  )$
+}}}
+
+Now you are ready to add your app to AppEngine. Start you AppEngineLauncher and add your newly created dojango AppEngine project to it by selecting File -> Add Existing Project and let it point to your newly created folder.
