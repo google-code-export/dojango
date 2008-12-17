@@ -8,14 +8,19 @@ Before you start with this, you should get and install the AppEngine SDK:
 
 http://code.google.com/intl/de-DE/appengine/downloads.html
 
-Afterwards you need to get [http://code.google.com/p/google-app-engine-django/ Google AppEngine Helper] and extract it somewhere:
+Afterwards you need need a helper project to get started quickly. There is the [http://code.google.com/p/app-engine-patch/ AppEngine Patch] and the  [http://code.google.com/p/google-app-engine-django/ Google AppEngine Helper] you can use to start an empty Django AppEngine project. The currently released version of the [http://code.google.com/p/google-app-engine-django/ AppEngine Helper] just supports Django 0.96 (The version, that is available on Google AppEngine. Note: they are working on adding a newer Django version) and the [http://code.google.com/p/app-engine-patch/ AppEngine Patch] already contains Django Version 1.0.2. [http://code.google.com/p/app-engine-patch/ AppEngine Patch] also contains several utilities that help developing applications with Django on AppEngine:
 
 {{{
 cd ~
-wget http://google-app-engine-django.googlecode.com/files/appengine_helper_for_django-r52.zip
-unzip appengine_helper_for_django-r52.zip
+wget http://app-engine-patch.googlecode.com/files/appenginepatch-sample-0.9.2.zip
+unzip appenginepatch-sample-0.9.2.zip
 # renaming the extracted folder to your appengine name (just a recommendation)
-mv appengine_helper_for_django my-appengine
+mv appenginepatch-sample my-appengine
+## or alternatively
+## wget http://google-app-engine-django.googlecode.com/files/appengine_helper_for_django-r52.zip
+## unzip appengine_helper_for_django-r52.zip
+## renaming the extracted folder to your appengine name (just a recommendation)
+## mv appengine_helper_for_django my-appengine
 }}}
 
 Now go to that directory and do the same steps as in the GettingStarted guide, but starting with step with *1. Add dojango as app to your project*. The AppEngine helper for django already contains a simple django project mixed with files needed by AppEngine.
