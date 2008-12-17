@@ -23,7 +23,7 @@ mv appenginepatch-sample my-appengine
 ## mv appengine_helper_for_django my-appengine
 }}}
 
-Now go to that directory and do the same steps as in the GettingStarted guide, but starting with step with *1. Add dojango as app to your project*. The AppEngine helper for django already contains a simple django project mixed with files needed by AppEngine.
+Now go to that directory and do the same steps as in the GettingStarted guide, but starting with step *1. Add dojango as app to your project*. The AppEngine helper for django already contains a simple django project mixed with files needed by AppEngine.
 
 To suit the helper to your needs, you have to set the application name, define, which files should be served statically and which files should be skipped when synching to AppEngine in your *app.yaml*:
 
