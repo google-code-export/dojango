@@ -10,7 +10,7 @@ The description is based on the dojo version 1.2.3 and it is necessary that you'
 
 {{{
 	wget http://download.dojotoolkit.org/release-1.2.3/dojo-release-1.2.3-src.tar.gz
-	# or curl http://download.dojotoolkit.org/release-1.1.1/dojo-release-1.2.3-src.tar.gz
+	# or curl http://download.dojotoolkit.org/release-1.2.3/dojo-release-1.2.3-src.tar.gz
 	tar xzvf dojo-release-1.2.3-src.tar.gz
 	mv dojo-release-1.2.3-src/* mysite/dojango/media/dojo/1.2.3/
 	rm -r dojo-release-1.2.3-src*
