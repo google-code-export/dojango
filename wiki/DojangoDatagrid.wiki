@@ -196,7 +196,7 @@ http://lh6.ggpht.com/_ZrLFllL7ISk/SfnhV_epJEI/AAAAAAAAAJo/WbjYFILt8vQ/search.JPG
 ||height||height of datagrid, defaults to "100%"||
 ||id||id of datagird, optional but useful to if planning on using dojo.connect to the grid.||
 ||label||dict of attribute:label for header. (other ways exist of setting these)||
-||query|| ||
+||query||way to specify conditions for the table.  i.e. to only display elements whose id>10: {{{ query={ 'id__gt':10 } }}} ||
 ||search|| list of fields to query against when searching ||
 ||nosort||fields not to sort on||
 ||formatter||dict of attribute:js formatter function||
