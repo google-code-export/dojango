@@ -186,4 +186,4 @@ will return models whose name is the same as the search or whose desc contains t
            search= ('name__contains','desc__contains')
         {% enddatagrid %}
 }}}
-http://lh4.ggpht.com/_ZrLFllL7ISk/Sfng3DNG0pI/AAAAAAAAAJg/fuYa-9O2D9I/search.JPG
+http://lh6.ggpht.com/_ZrLFllL7ISk/SfnhV_epJEI/AAAAAAAAAJo/WbjYFILt8vQ/search.JPG
