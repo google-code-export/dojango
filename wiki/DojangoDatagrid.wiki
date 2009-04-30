@@ -96,3 +96,10 @@ Finally we create a template to render containing our datagrid:
 </div>
 {% endblock %}
 }}}
+http://picasaweb.google.com/lh/photo/eFX-evb6FKfLetQKRfaybA?authkey=Gv1sRgCPa0y8HnqeCGNw&feat=directlink
+Then in settings.py you can change the dojo theme:
+{{{
+DOJANGO_DOJO_THEME = "soria"
+}}}
+http://picasaweb.google.com/lh/photo/1Z5zMVzaMBmJGQeFT_HF-A?authkey=Gv1sRgCPa0y8HnqeCGNw&feat=directlink
+I will use soria for the rest of this walk through.
