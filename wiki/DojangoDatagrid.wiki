@@ -187,3 +187,16 @@ will return models whose name is the same as the search or whose desc contains t
         {% enddatagrid %}
 }}}
 http://lh6.ggpht.com/_ZrLFllL7ISk/SfnhV_epJEI/AAAAAAAAAJo/WbjYFILt8vQ/search.JPG
+
+== Options ==
+|| list_display || list or tuple of model attributes (model fields or model functions). defaults to all of the sql fields of the model ||
+|| column_width||dict with model attribute:width||
+||default_width||default width if not specified by column_width. defaults to "auto"||
+||width||width of the datagrid, defaults to "100%"||
+||height||height of datagrid, defaults to "100%"||
+||id||id of datagird, optional but useful to if planning on using dojo.connect to the grid.||
+||label||dict of attribute:label for header. (other ways exist of setting these)||
+||query|| ||
+||search|| list of fields to query against when searching ||
+||nosort||fields not to sort on||
+||formatter||dict of attribute:js formatter function||
