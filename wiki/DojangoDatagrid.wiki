@@ -151,20 +151,39 @@ http://lh6.ggpht.com/_ZrLFllL7ISk/SfnYTQv_6vI/AAAAAAAAAJY/dq9ieyczvlI/two.JPG
 A point to this is that the result_totals is a function of the model and not a field, but when added to the list_display tuple or list it will added.  The different header is from the functions "short_description" which is the same as for the Admin interface.  They can also be specified within the template with the label option.
 {{{
         {% datagrid myapp Test %}
-         list_display = ('id','name','result_totals')
-         width = "350px"
-         height= "170px"
-         label = {'name': 'Test Name'}
+           list_display = ('id','name','result_totals')
+           width = "350px"
+           height= "170px"
+           label = {'name': 'Test Name'}
         {% enddatagrid %}
 }}}
 There will be a error if trying to sort on the result_totals column, simply because a query set cannot be ordered by a function of model.  You can disable sorting on columns with the "nosort" option.
 {{{
         {% datagrid myapp Test %}
-         list_display = ('id','name','result_totals')
-         width = "350px"
-         height= "170px"
-         label = {'name': 'Test Name'}
-         nosort= ['result_totals']
+           list_display = ('id','name','result_totals')
+           width = "350px"
+           height= "170px"
+           label = {'name': 'Test Name'}
+           nosort= ['result_totals']
         {% enddatagrid %}
 }}}
 it was done above with a list instead of a tuple this, but they are interchangeable. 
+
+== Live Search ==
+
+You can specify a list of fields for the search option that will be added (OR'd together) to the where clause.  If the value is a field it will look for an exact match, but you can also specify operators.  i.e.
+{{{
+search = ('name', 'desc__contains')
+}}}
+will return models whose name is the same as the search or whose desc contains that is within the search field (other operators like gt,lt,lte,gte,startswith and endswith will work also).  The queryreadstore will be updated on every keyup event in the search field.
+{{{
+        {% datagrid myapp Test %}
+           list_display = ('id','name','result_totals')
+           width = "350px"
+           height= "170px"
+           label = {'name': 'Test Name'}
+           nosort= ['result_totals']
+           search= ('name__contains','desc__contains')
+        {% enddatagrid %}
+}}}
+http://lh4.ggpht.com/_ZrLFllL7ISk/Sfng3DNG0pI/AAAAAAAAAJg/fuYa-9O2D9I/search.JPG
