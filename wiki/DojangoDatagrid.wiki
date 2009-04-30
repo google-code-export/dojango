@@ -100,7 +100,7 @@ http://lh4.ggpht.com/_ZrLFllL7ISk/SfnOBdqJLVI/AAAAAAAAAIo/U0b8odbhYuU/list.png
 
 == More advanced options ==
 
-Then in settings.py you can change the dojo theme:
+Then in settings.py you can change the Dojo theme:
 {{{
 DOJANGO_DOJO_THEME = "soria"
 }}}
@@ -197,6 +197,6 @@ http://lh6.ggpht.com/_ZrLFllL7ISk/SfnhV_epJEI/AAAAAAAAAJo/WbjYFILt8vQ/search.JPG
 ||id||id of datagird, optional but useful to if planning on using dojo.connect to the grid.||
 ||label||dict of attribute:label for header. (other ways exist of setting these)||
 ||query||way to specify conditions for the table.  i.e. to only display elements whose id>10: {{{ query={ 'id__gt':10 } }}} ||
-||search|| list of fields to query against when searching ||
+||search|| list or tuple of fields to query against when searching ||
 ||nosort||fields not to sort on||
 ||formatter||dict of attribute:js formatter function||
