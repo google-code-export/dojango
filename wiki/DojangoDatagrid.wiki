@@ -1,4 +1,4 @@
-#Quick walk through for using the datagrid templatetag
+#summary Help - Quick walk through for using the datagrid templatetag
 
 ==Install Dojango==
 
