@@ -1,0 +1,98 @@
+#Quick walk through for using the datagrid templatetag
+
+==Install Dojango==
+
+See getting started guide
+
+
+== Create Project and App ==
+From your command line prompt create a project and an app within
+{{{
+ django-admin.py startproject test_dojango
+ cd test_dojango
+ python manage.py startapp myapp
+}}}
+
+and make the following changes to settings.py:
+{{{
+INSTALLED_APPS = (
++    'dojango','myapp',
+
+MIDDLEWARE_CLASSES = ( 
++ 'dojango.middleware.DojoAutoRequireMiddleware',
+}}}
+
+To deliver the media files you also have to add the URL definitions of dojango to your main URL defintion file (test_dojango/urls.py):
+{{{
+urlpatterns = patterns('',
+...
++ (r'^dojango/disp/(?P<app_name>.*)/(?P<model_name>.*)$','dojango.views.disp'),
++ (r'^dojango/', include('dojango.urls')),
+)
+}}}
+
+== Create Models ==
+
+For the sake of this walk through we will create a couple simple models in myapp.models:
+{{{
+class Test(models.Model):
+    name = models.CharField(max_length=32)
+    desc = models.CharField(max_length=64)
+
+    def result_totals(self): 
+        qset = TestCase.objects.filter(test_suite=self)
+        total = qset.count()
+        if total==0: return (0,0)
+        accm = qset.filter(status="pass").count()
+        return (total,accm)
+    result_totals.short_description= "Total(<font color=green>Passed</font>)"
+
+class Result(models.Model):
+    name = models.CharField(max_length=15)
+    status = models.CharField(max_length=4)
+    test = models.ForeignKey(Test)
+}}}
+To generate data so our datagrid has something to show here is a quick function to add test data.
+{{{
+def create_results(x):
+    for tests in xrange(x):
+        test = Test(name="test%s"%tests, desc="desc for %s"%tests)
+        test.save()
+        for i in xrange(randint(1,5)):
+            r = Result(test=test)
+            r.name =  ''.join(sample(string.letters, randint(4,10)))
+            r.status = choice(("pass","fail"))
+            r.save()
+}}}
+
+== Create the view and template ==
+in urls we add to a default path:
+{{{
+urlpatterns = patterns('',
+...
+  (r'^dojango/disp/(?P<app_name>.*)/(?P<model_name>.*)$','dojango.views.disp'),
+  (r'^dojango/', include('dojango.urls')),
+  (r'','myapp.views.index')
+)
+}}}
+then within myapp.views we add a function to handle the request:
+{{{
+from django.shortcuts import render_to_response
+
+def index(request):        
+    context = {}
+    return render_to_response("list_tests.html", context)
+}}}
+Finally we create a template to render containing our datagrid:
+{{{
+{% extends "dojango/base.html" %}
+{% load dojango_grid %}
+{% block dojango_page_title %} Testing datagrid {% endblock %}
+
+{% block dojango_content %}
+<H1>Lists:</H1>
+<div style="height:100px; width:400px">
+    {% simple_datagrid myapp Test %}
+</div>
+{% endblock %}
+}}}
