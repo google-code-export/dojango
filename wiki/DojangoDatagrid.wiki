@@ -153,7 +153,7 @@ Since this is defined in the template however we can create multiple instances o
     </div>
 }}} 
 
-http://lh6.ggpht.com/_ZrLFllL7ISk/SfnYTQv_6vI/AAAAAAAAAJY/dq9ieyczvlI/two.JPG
+http://lh5.ggpht.com/_ZrLFllL7ISk/Sfoe5xa3vEI/AAAAAAAAAJ4/ATsK_YG5Ypo/two.JPG
 
 A point to this is that the result_totals is a function of the model and not a field, but when added to the list_display tuple or list it will added.  The different header is from the functions "short_description" which is the same as for the Admin interface.  They can also be specified within the template with the label option.
 {{{
@@ -193,7 +193,7 @@ will return models whose name is the same as the search or whose desc contains t
            search= ('name__contains','desc__contains')
         {% enddatagrid %}
 }}}
-http://lh6.ggpht.com/_ZrLFllL7ISk/SfnhV_epJEI/AAAAAAAAAJo/WbjYFILt8vQ/search.JPG
+http://lh4.ggpht.com/_ZrLFllL7ISk/Sfoe5-vqTuI/AAAAAAAAAJw/_00UvN6apa8/search.JPG
 
 == Options ==
 || list_display || list or tuple of model attributes (model fields or model functions). defaults to all of the sql fields of the model ||
