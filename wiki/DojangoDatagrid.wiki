@@ -52,6 +52,13 @@ class Result(models.Model):
     status = models.CharField(max_length=4)
     test = models.ForeignKey(Test)
 }}}
+Add them to the grant list for dojango in your setting.py.  The contents of this tuple can be 'app.model' to allow access to a specific model, or 'app' to allow access to all models within that app or 'model' for any model whose name matches.
+{{{
+DOJANGO_DATAGRID_ACCESS = (
+  'myapp.Test',
+  'myapp.Result',
+)
+}}}
 To generate data so our datagrid has something to show here is a quick function to add test data.
 {{{
 def create_results(x):
