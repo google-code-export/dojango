@@ -61,6 +61,11 @@ DOJANGO_DATAGRID_ACCESS = (
 }}}
 To generate data so our datagrid has something to show here is a quick function to add test data.
 {{{
+from random import choice, randint, sample
+import string
+
+from myapp.models import Result, Test
+
 def create_results(x):
     for tests in xrange(x):
         test = Test(name="test%s"%tests, desc="desc for %s"%tests)
