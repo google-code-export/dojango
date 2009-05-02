@@ -26,7 +26,6 @@ To deliver the media files you also have to add the URL definitions of dojango t
 {{{
 urlpatterns = patterns('',
 ...
-+ (r'^dojango/disp/(?P<app_name>.*)/(?P<model_name>.*)$','dojango.views.disp'),
 + (r'^dojango/', include('dojango.urls')),
 )
 }}}
@@ -82,7 +81,6 @@ in urls we add to a default path:
 {{{
 urlpatterns = patterns('',
 ...
-  (r'^dojango/disp/(?P<app_name>.*)/(?P<model_name>.*)$','dojango.views.disp'),
   (r'^dojango/', include('dojango.urls')),
   (r'','myapp.views.index')
 )
