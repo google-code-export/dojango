@@ -129,7 +129,7 @@ extend from *dojango/base.html*.
 || DOJANGO.IS_LOCAL_BUILD || Boolean || Is the used profile a local build? (local_release, local_release_uncompressed) ||
 || DOJANGO.IS_LOCAL || Boolean || Is a local profile used? (local, local_release, local_release_uncompressed) ||
 || DOJANGO.UNCOMPRESSED || Boolean || Using a uncompressed version? ||
-|| DOJANGO.USE_GFX || Boolean || Is a special gfx version xd build used? ||
+|| DOJANGO.USE_GFX || Boolean || Is a special gfx version xd build used? (just valid for Dojo version <= 1.1.1 and the AOL CDN) ||
 || DOJANGO.VERSION || String || Used dojo version. ||
 || DOJANGO.THEME_CSS_URL || String || The absolute URL to the main theme css file. ||
 || DOJANGO.BASE_MEDIA_URL || String || The absolute URL to the base URL, where all dojango media files reside (js/css/images). ||
