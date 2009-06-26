@@ -16,8 +16,8 @@ Sets the dojango profile, that should be used within the dojango context. Possib
   * "aol_uncompressed"
   * "aol_gfx"
   * "aol_gfx_uncompressed"
-  * "google"
-  * "google_uncompressed"
+  * "google" (also accessible via SSL, see DOJANGO_CDN_USE_SSL)
+  * "google_uncompressed" (also accessible via SSL, see DOJANGO_CDN_USE_SSL)
   * "local"
   * "local_release"
   * "local_release_uncompressed"
@@ -90,6 +90,10 @@ This is the recommendation of Dojo since version 1.2.0. Possible values:
 
 Be careful if you modify the following settings. You really should know what you
 are doing, if you are changing these.
+
+===DOJANGO_CDN_USE_SSL (default: False)===
+
+It will use SSL for delivering the Dojo files, when this setting is True and Dojo is loaded via CDN. (Note: just the Google CDN supports https!)
 
 ===DOJANGO_BASE_MEDIA_URL (default: /dojango/media)===
 
