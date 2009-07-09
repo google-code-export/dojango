@@ -1,4 +1,5 @@
 = Introduction =
+Help - How to enable Dojo's form functonality in dojango.
 
 Since version 0.4 dojango provides the capability to use Dojo form elements the same as you would use normal forms in Django. All form fields, widgets and other form functionality that is available in Django (e.g. model forms, formsets, ...) is now implemented as an extended widget within dojango. If you would like to enhance your normal django forms with more enhanced Dojo form elements, you now just simply have to import the forms library from dojango:
 
