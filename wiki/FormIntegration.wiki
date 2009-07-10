@@ -56,27 +56,27 @@ The main difference between the Django form fields and the Dojango ones is, that
 The widget itself then decides, how each attribute is assigned to the Dojo widget. In the following table you see, which widget is assigned as default to a form field and which validation parameters are possible within that form field:
 
 ||**dojango.forms.fields**||**dojango.forms.widgets**||**possible parameters**||
-||CharField||ValidationTextInput||required, help_text, max_length, min_length||
-||ChoiceField||Select||required, help_text||
-||TypedChoiceField||Select||required, help_text||
-||IntegerField||NumberTextInput||required, help_text, max_value, min_value||
-||BooleanField||CheckboxInput||required, help_text||
-||FileField||FileInput||required, help_text||
-||ImageField||FileInput||required, help_text||
-||DateField||DateInput||required, help_text, min_value, max_value||
-||TimeField||TimeInput||required, help_text, min_value, max_value||
-||DateTimeField||DateTimeInput||required, help_text, min_value, max_value||
-||SplitDateTimeField||DateTimeInput||required, help_text, min_value, max_value||
-||RegexField||ValidationTextInput||required, help_text, js_regex||
-||DecimalField||NumberTextInput||required, help_text, max_value, min_value, max_digits, decimal_places||
-||FloatField||ValidationTextInput||required, help_text, max_value, min_value||
-||FilePathField||Select||required, help_text||
-||MultipleChoiceField||SelectMultiple||required, help_text||
-||NullBooleanField||NullBooleanSelect|| ||
-||EmailField||EmailTextInput||required, help_text||
-||IPAddressField||IPAddressTextInput||required, help_text||
-||URLField||URLTextInput||required, help_text||
-||SlugField||ValidationTextInput||required, help_text||
+||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#charfield CharField]||ValidationTextInput||required, help_text, max_length, min_length||
+||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#choicefield ChoiceField]||Select||required, help_text||
+||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#typedchoicefield TypedChoiceField]||Select||required, help_text||
+||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#integerfield IntegerField]||NumberTextInput||required, help_text, max_value, min_value||
+||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#booleanfield BooleanField]||CheckboxInput||required, help_text||
+||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#filefield FileField]||FileInput||required, help_text||
+||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#imagefield ImageField]||FileInput||required, help_text||
+||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#datefield DateField]||DateInput||required, help_text, min_value, max_value||
+||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#timefield TimeField]||TimeInput||required, help_text, min_value, max_value||
+||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#datetimefield DateTimeField]||DateTimeInput||required, help_text, min_value, max_value||
+||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#splitdatetimefield SplitDateTimeField]||DateTimeInput||required, help_text, min_value, max_value||
+||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#regexfield RegexField]||ValidationTextInput||required, help_text, js_regex||
+||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#decimalfield DecimalField]||NumberTextInput||required, help_text, max_value, min_value, max_digits, decimal_places||
+||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#floatfield FloatField]||ValidationTextInput||required, help_text, max_value, min_value||
+||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#filepathfield FilePathField]||Select||required, help_text||
+||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#multiplechoicefield MultipleChoiceField]||SelectMultiple||required, help_text||
+||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#nullbooleanfield NullBooleanField]||NullBooleanSelect|| ||
+||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#emailfield EmailField||EmailTextInput]||required, help_text||
+||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#ipaddressfield IPAddressField]||IPAddressTextInput||required, help_text||
+||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#urlfield URLField]||URLTextInput||required, help_text||
+||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#slugfield SlugField]||ValidationTextInput||required, help_text||
 
 = Django widgets utilizing Dojo widgets =
 
@@ -84,12 +84,12 @@ The widget itself then decides, how each attribute is assigned to the Dojo widge
 
 ||**Django widget**||**Dojo widget**||**Field attribute => Widget attribute**||**Notes**||
 ||Widget||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit._Widget dijit._Widget]|| || ||
-||Input||none|| || ||
+||Input|| || || ||
 ||TextInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.TextBox dijit.form.TextBox]||max_length => maxLength|| ||
 ||PasswordInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.TextBox dijit.form.TextBox]||max_length => maxLength|| ||
 ||HiddenInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.TextBox dijit.form.TextBox]|| || ||
 ||MultipleHiddenInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.TextBox dijit.form.TextBox]|| || ||
-||FileInput|[http://api.dojotoolkit.org/jsdoc/HEAD/|dojox.form.FilenInput dojox.form.FilenInput]|| ||additional CSS: dojox/form/resources/FileInput.css||
+||FileInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dojox.form.FileInput dojox.form.FilenInput]|| ||additional CSS: dojox/form/resources/FileInput.css||
 ||Textarea||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.Textarea dijit.form.Textarea]||max_length => maxLength|| ||
 ||DateInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.DateTextBox dijit.form.DateTextBox]||required => required<br>help_text => promptMessage<br>min_value => constraints["min"]<br>max_value => constraints["max"]|| ||
 ||TimeInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.TimeTextBox dijit.form.TimeTextBox]||required => required<br>help_text => promptMessage<br>min_value => constraints["min"]<br>max_value => constraints["max"]|| ||
@@ -101,7 +101,7 @@ The widget itself then decides, how each attribute is assigned to the Dojo widge
 ||RadioFieldRenderer|| || ||identical to Django's RadioInput||
 ||RadioSelect||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.RadioButton dijit.form.RadioButton]|| || ||
 ||CheckboxSelectMultiple||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.CheckBox dijit.form.CheckBox]|| || ||
-||MultiWidget||none|| || ||
+||MultiWidget|| || || ||
 ||SplitDateTimeWidget|| || ||using DateInput and TimeInput||
 ||DateTimeInput|| || ||same as SplitDateTimeWidget||
 ||SplitHiddenDateTimeWidget||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.TextBox dijit.form.TextBox]|| || ||
@@ -109,19 +109,19 @@ The widget itself then decides, how each attribute is assigned to the Dojo widge
 == Additional widgets ==
 
 ||**Django widget**||**Dojo widget**||**Field attribute => Widget attribute**||**Notes**||
-||SimpleTextarea||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.SimpleTextarea dijit.form.SimpleTextarea]||max_length => maxLength|| ||
-||EditorInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.Editor dijit.Editor]|| || ||
-||HorizontalSliderInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.HorizontalSlider dijit.form.HorizontalSlider]||min_value => minimum<br>max_value => maximum|| ||
-||VerticalSliderInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.VerticalSlider dijit.form.VerticalSlider]||min_value => minimum<br>max_value => maximum|| ||
-||ValidationTextInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.ValidationTextBox dijit.form.ValidationTextBox]||required => required<br>help_text => promptMessage<br>js_regex => regExp<br>max_length => maxLength|| ||
-||ValidationPasswordInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.ValidationTextBox dijit.form.ValidationTextBox]||required => required<br>help_text => promptMessage<br>js_regex => regExp<br>max_length => maxLength|| ||
-||EmailTextInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.ValidationTextBox dijit.form.ValidationTextBox]||required => required<br>help_text => promptMessage<br>js_regex => regExp<br>max_length => maxLength||using the following regex: dojox.validate.regexp.emailAddress||
-||IPAddressTextInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.ValidationTextBox dijit.form.ValidationTextBox]||required => required<br>help_text => promptMessage<br>js_regex => regExp<br>max_length => maxLength||using the following regex: dojox.validate.regexp.ipAddress||
-||URLTextInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.ValidationTextBox dijit.form.ValidationTextBox]||required => required<br>help_text => promptMessage<br>js_regex => regExp<br>max_length => maxLength||using the following regex: dojox.validate.regexp.url||
-||NumberTextInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.NumberTextBox dijit.form.NumberTextBox]||required => required<br>help_text => promptMessage<br>min_value => constraints["min"]<br>max_value => constraints["max"]<br>decimal_places => constraints["places"]|| ||
-||RangeBoundTextInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.RangeBoundTextBox dijit.form.RangeBoundTextBox]||required => required<br>help_text => promptMessage<br>min_value => constraints["min"]<br>max_value => constraints["max"]<br>decimal_places => constraints["places"]|| ||
-||NumberSpinnerInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.NumberSpinner dijit.form.DateTextBox]||required => required<br>help_text => promptMessage<br>min_value => constraints["min"]<br>max_value => constraints["max"]<br>decimal_places => constraints["places"]|| ||
-||RatingInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dojox.form.Rating||max_value => numStars|| ||
-||DateInputAnim||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.DateTextBox dijit.form.DateTextBox]||required => required<br>help_text => promptMessage<br>min_value => constraints["min"]<br>max_value => constraints["max"]||additional CSS: dojox/widget/Calendar/Calendar.css||
-||DropDownSelect||[http://api.dojotoolkit.org/jsdoc/HEAD/dojox.form.DropDownSelect dojox.form.DropDownSelect]||required => required<br>help_text => promptMessage||additional CSS: dojox/form/resources/DropDownSelect.css||
-||CheckedMultiSelect||[http://api.dojotoolkit.org/jsdoc/HEAD/dojox.form.CheckedMultiSelect dojox.form.CheckedMultiSelect]||required => required<br>help_text => promptMessage||additional CSS: dojox/form/resources/CheckedMultiSelect.css. The option _multiple_ can't be used on that widget.||
+||!SimpleTextarea||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.SimpleTextarea dijit.form.SimpleTextarea]||max_length => maxLength|| ||
+||!EditorInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.Editor dijit.Editor]|| || ||
+||!HorizontalSliderInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.HorizontalSlider dijit.form.HorizontalSlider]||min_value => minimum<br>max_value => maximum|| ||
+||!VerticalSliderInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.VerticalSlider dijit.form.VerticalSlider]||min_value => minimum<br>max_value => maximum|| ||
+||!ValidationTextInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.ValidationTextBox dijit.form.ValidationTextBox]||required => required<br>help_text => promptMessage<br>js_regex => regExp<br>max_length => maxLength|| ||
+||!ValidationPasswordInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.ValidationTextBox dijit.form.ValidationTextBox]||required => required<br>help_text => promptMessage<br>js_regex => regExp<br>max_length => maxLength|| ||
+||!EmailTextInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.ValidationTextBox dijit.form.ValidationTextBox]||required => required<br>help_text => promptMessage<br>js_regex => regExp<br>max_length => maxLength||using the following regex: dojox.validate.regexp.emailAddress||
+||!IPAddressTextInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.ValidationTextBox dijit.form.ValidationTextBox]||required => required<br>help_text => promptMessage<br>js_regex => regExp<br>max_length => maxLength||using the following regex: dojox.validate.regexp.ipAddress||
+||!URLTextInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.ValidationTextBox dijit.form.ValidationTextBox]||required => required<br>help_text => promptMessage<br>js_regex => regExp<br>max_length => maxLength||using the following regex: dojox.validate.regexp.url||
+||!NumberTextInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.NumberTextBox dijit.form.NumberTextBox]||required => required<br>help_text => promptMessage<br>min_value => constraints["min"]<br>max_value => constraints["max"]<br>decimal_places => constraints["places"]|| ||
+||!RangeBoundTextInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.RangeBoundTextBox dijit.form.RangeBoundTextBox]||required => required<br>help_text => promptMessage<br>min_value => constraints["min"]<br>max_value => constraints["max"]<br>decimal_places => constraints["places"]|| ||
+||!NumberSpinnerInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.NumberSpinner dijit.form.DateTextBox]||required => required<br>help_text => promptMessage<br>min_value => constraints["min"]<br>max_value => constraints["max"]<br>decimal_places => constraints["places"]|| ||
+||!RatingInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dojox.form.Rating dojox.form.Rating]||max_value => numStars|| ||
+||!DateInputAnim||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.DateTextBox dijit.form.DateTextBox]||required => required<br>help_text => promptMessage<br>min_value => constraints["min"]<br>max_value => constraints["max"]||additional CSS: dojox/widget/Calendar/Calendar.css||
+||!DropDownSelect||[http://api.dojotoolkit.org/jsdoc/HEAD/dojox.form.DropDownSelect dojox.form.DropDownSelect]||required => required<br>help_text => promptMessage||additional CSS: dojox/form/resources/DropDownSelect.css||
+||!CheckedMultiSelect||[http://api.dojotoolkit.org/jsdoc/HEAD/dojox.form.CheckedMultiSelect dojox.form.CheckedMultiSelect]||required => required<br>help_text => promptMessage||additional CSS: dojox/form/resources/CheckedMultiSelect.css. The option _multiple_ can't be used on that widget.||
