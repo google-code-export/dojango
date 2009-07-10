@@ -1,6 +1,6 @@
-#summary Help - How to enable Dojo's form functonality in dojango.
+#summary Help - How to enable Dojo's form functionality in dojango.
 
-Since version 0.4 dojango provides the capability to use Dojo form elements the same as you would use normal forms in Django. All form fields, widgets and other form functionality that is available in Django (e.g. model forms, formsets, ...) is now implemented as an extended widget within dojango. If you would like to enhance your normal django forms with more enhanced Dojo form elements, you now just simply have to import the forms library from dojango:
+Since version 0.4 dojango provides the capability to use Dojo form elements the same as you would use normal forms in Django. All form fields, widgets and other form functionality that is available in Django (e.g. model forms, formsets, ...) is now implemented (extended) within dojango. If you would like to enhance your normal django forms with more enhanced Dojo form elements, you now just simply have to import the forms library from dojango:
 
 {{{
 # instead of
@@ -9,9 +9,40 @@ Since version 0.4 dojango provides the capability to use Dojo form elements the 
 from dojango.forms import *
 }}}
 
+Note: The form integration just works with *Django version >= 1.0.2*
+
+To use the form integration, you first have to follow the GettingStarted guide and additionaly you have enable the following middleware in your settings.py:
+
+{{{
+MIDDLEWARE_CLASSES = (
+    'dojango.middleware.DojoCollector',
+    # (not named DojoAutoRequireMiddleware anymore!)
+    // ...
+)
+}}}
+
+This middleware initializes a collector module for the current request thread, where each individual widget can add its used modules. All collected modules of one request are then available in the template context *DOJANGO.COLLECTOR*. If you extend your template from `dojango/base.html` or `dojango/base_i18n.html` you don't have to care about it. Just generate your dojango form and place it in the template block *dojango_content*:
+
+{{{
+{% extends "dojango/base.html" %}
+{% block dojango_content %}
+    {# PLACE YOUR FORMS HERE #}
+{% endblock %}
+}}}
+
+If you use `include.html` or `include_i18n.html` you have to deal with the Dojo collector in your template on your own:
+
+{{{
+<script type="text/javascript">
+    {% for require in DOJANGO.COLLECTOR %}
+        dojo.require("{{ require }}");
+    {% endfor %}		
+</script>
+}}}
+
 = Form fields and widgets =
 
-The only difference between the Django form fields and the Dojango ones is, that all validation attributes are passed to the widgets. Dojo's form elements can also validate individual form elements in the browser and dojango just populates the validation of the form fields to each widget. Thus the following possible form field attributes are forwarded to the assigned widget:
+The main difference between the Django form fields and the Dojango ones is, that all validation attributes are passed to the widgets. Dojo's form elements can also validate individual form elements in the browser and dojango just populates the validation of the form fields to each widget. Thus the following possible form field attributes are forwarded to the assigned widget:
 
   * required
   * help_text
@@ -25,27 +56,27 @@ The only difference between the Django form fields and the Dojango ones is, that
 The widget itself then decides, how each attribute is assigned to the Dojo widget. In the following table you see, which widget is assigned as default to a form field and which validation parameters are possible within that form field:
 
 ||**dojango.forms.fields**||**dojango.forms.widgets**||**possible parameters**||
-||CharField||TextInput||required, max_length, min_length||
-||ChoiceField||Select||required||
-||TypedChoiceField||Select||required||
-||IntegerField||NumberTextInput||required, max_value, min_value||
-||BooleanField||CheckboxInput||required||
-||FileField||FileInput||required||
-||ImageField||FileInput||required||
-||DateField||DateInput||required, min_value, max_value||
-||TimeField||TimeInput||required, min_value, max_value||
-||DateTimeField||DateTimeInput||required, min_value, max_value||
-||SplitDateTimeField||DateTimeInput||required, min_value, max_value||
-||RegexField||ValidationTextInput||required, js_regex||
-||DecimalField||NumberTextInput||required, max_value, min_value, max_digits, max_decimal_places||
-||FloatField||ValidationTextInput||required, max_value, min_value||
-||FilePathField||Select||required||
-||MultipleChoiceField||SelectMultiple||required||
-||NullBooleanField||NullBooleanSelect||'none'||
-||EmailField||EmailTextInput||required||
-||IPAddressField||IPAddressTextInput||required||
-||URLField||URLTextInput||required||
-||SlugField||ValidationTextInput||required||
+||CharField||ValidationTextInput||required, help_text, max_length, min_length||
+||ChoiceField||Select||required, help_text||
+||TypedChoiceField||Select||required, help_text||
+||IntegerField||NumberTextInput||required, help_text, max_value, min_value||
+||BooleanField||CheckboxInput||required, help_text||
+||FileField||FileInput||required, help_text||
+||ImageField||FileInput||required, help_text||
+||DateField||DateInput||required, help_text, min_value, max_value||
+||TimeField||TimeInput||required, help_text, min_value, max_value||
+||DateTimeField||DateTimeInput||required, help_text, min_value, max_value||
+||SplitDateTimeField||DateTimeInput||required, help_text, min_value, max_value||
+||RegexField||ValidationTextInput||required, help_text, js_regex||
+||DecimalField||NumberTextInput||required, help_text, max_value, min_value, max_digits, decimal_places||
+||FloatField||ValidationTextInput||required, help_text, max_value, min_value||
+||FilePathField||Select||required, help_text||
+||MultipleChoiceField||SelectMultiple||required, help_text||
+||NullBooleanField||NullBooleanSelect|| ||
+||EmailField||EmailTextInput||required, help_text||
+||IPAddressField||IPAddressTextInput||required, help_text||
+||URLField||URLTextInput||required, help_text||
+||SlugField||ValidationTextInput||required, help_text||
 
 = Django widgets utilizing Dojo widgets =
 
@@ -54,12 +85,12 @@ The widget itself then decides, how each attribute is assigned to the Dojo widge
 ||**Django widget**||**Dojo widget**||**Field attribute => Widget attribute**||**Notes**||
 ||Widget||dijit.form.Widget|| || ||
 ||Input||none|| || ||
-||TextInput||dijit.form.TextBox||max_length => maxlength|| ||
-||PasswordInput||dijit.form.TextBox||max_length => maxlength|| ||
+||TextInput||dijit.form.TextBox||max_length => maxLength|| ||
+||PasswordInput||dijit.form.TextBox||max_length => maxLength|| ||
 ||HiddenInput||dijit.form.TextBox|| || ||
 ||MultipleHiddenInput||dijit.form.TextBox|| || ||
 ||FileInput||dojox.form.FilenInput|| ||additional CSS: dojox/form/resources/FileInput.css||
-||Textarea||dijit.form.Textarea|| || ||
+||Textarea||dijit.form.Textarea||max_length => maxLength|| ||
 ||DateInput||dijit.form.DateTextBox||required => required<br>help_text => promptMessage<br>min_value => constraints["min"]<br>max_value => constraints["max"]|| ||
 ||TimeInput||dijit.form.TimeTextBox||required => required<br>help_text => promptMessage<br>min_value => constraints["min"]<br>max_value => constraints["max"]|| ||
 ||CheckboxInput||dijit.form.CheckBox|| || ||
@@ -78,14 +109,15 @@ The widget itself then decides, how each attribute is assigned to the Dojo widge
 == Additional widgets ==
 
 ||**Django widget**||**Dojo widget**||**Field attribute => Widget attribute**||**Notes**||
+||SimpleTextarea||dijit.form.SimpleTextarea||max_length => maxLength|| ||
 ||EditorInput||dijit.Editor|| || ||
 ||HorizontalSliderInput||dijit.form.HorizontalSlider||min_value => minimum<br>max_value => maximum|| ||
 ||VerticalSliderInput||dijit.form.VerticalSlider||min_value => minimum<br>max_value => maximum|| ||
-||ValidationTextInput||dijit.form.ValidationTextBox||required => required<br>help_text => promptMessage<br>js_regex => regExp<br>max_length => maxlength|| ||
-||ValidationPasswordInput||dijit.form.ValidationTextBox||required => required<br>help_text => promptMessage<br>js_regex => regExp<br>max_length => maxlength|| ||
-||EmailTextInput||dijit.form.ValidationTextBox||required => required<br>help_text => promptMessage<br>js_regex => regExp<br>max_length => maxlength||using the following regex: dojox.validate.regexp.emailAddress||
-||IPAddressTextInput||dijit.form.ValidationTextBox||required => required<br>help_text => promptMessage<br>js_regex => regExp<br>max_length => maxlength||using the following regex: dojox.validate.regexp.ipAddress||
-||URLTextInput||dijit.form.ValidationTextBox||required => required<br>help_text => promptMessage<br>js_regex => regExp<br>max_length => maxlength||using the following regex: dojox.validate.regexp.url||
+||ValidationTextInput||dijit.form.ValidationTextBox||required => required<br>help_text => promptMessage<br>js_regex => regExp<br>max_length => maxLength|| ||
+||ValidationPasswordInput||dijit.form.ValidationTextBox||required => required<br>help_text => promptMessage<br>js_regex => regExp<br>max_length => maxLength|| ||
+||EmailTextInput||dijit.form.ValidationTextBox||required => required<br>help_text => promptMessage<br>js_regex => regExp<br>max_length => maxLength||using the following regex: dojox.validate.regexp.emailAddress||
+||IPAddressTextInput||dijit.form.ValidationTextBox||required => required<br>help_text => promptMessage<br>js_regex => regExp<br>max_length => maxLength||using the following regex: dojox.validate.regexp.ipAddress||
+||URLTextInput||dijit.form.ValidationTextBox||required => required<br>help_text => promptMessage<br>js_regex => regExp<br>max_length => maxLength||using the following regex: dojox.validate.regexp.url||
 ||NumberTextInput||dijit.form.NumberTextBox||required => required<br>help_text => promptMessage<br>min_value => constraints["min"]<br>max_value => constraints["max"]<br>decimal_places => constraints["places"]|| ||
 ||RangeBoundTextInput||dijit.form.RangeBoundTextBox||required => required<br>help_text => promptMessage<br>min_value => constraints["min"]<br>max_value => constraints["max"]<br>decimal_places => constraints["places"]|| ||
 ||NumberSpinnerInput||dijit.form.NumberSpinner||required => required<br>help_text => promptMessage<br>min_value => constraints["min"]<br>max_value => constraints["max"]<br>decimal_places => constraints["places"]|| ||
