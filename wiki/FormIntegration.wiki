@@ -2,7 +2,7 @@
 
 Note: The form integration just works with *Django version >= 1.0.2*
 
-Since version 0.4 dojango provides the capability to use Dojo form elements the same as you would use normal forms in Django. The big advantage of this is, that you can e.g. let the user enter a date via a date-picker, let him format a descripton with a rich text editor or let him select an integer value with a number spinner or a slider. Another benefit of using Dojango forms is, that Django's form validation is passed to the Dojo widgets so the entered data can be validated in the frontend with the same validation rules without needing to define them in your !JavaScript code again.
+Since version 0.4 dojango provides the capability to use Dojo form elements the same as you would use normal forms in Django. The big advantage of this is, that you can e.g. let the user enter a date via a date-picker, let him format a descripton with a rich text editor or let him select an integer value with a number spinner or a slider. Another benefit of using Dojango forms is, that Django's form validation is passed to the Dojo widgets so the entered data can be validated in the frontend with the same validation rules without needing to define them in your !JavaScript code again. Of course you also can define the look and feel of your Dojo widgets by [Configuration#DOJANGO_DOJO_THEME_(default:_"tundra") defining the used theme in your settings.py].
 
 Dojango let you define those enhanced Dojo widgets within your Django code. There is not much new to learn, if you use Dojango forms. All form fields, widgets and other [http://docs.djangoproject.com/en/dev/ref/forms/ form functionality] that is available in Django (e.g. [http://docs.djangoproject.com/en/dev/topics/forms/modelforms/#topics-forms-modelforms forms for models], [http://docs.djangoproject.com/en/dev/topics/forms/formsets/#topics-forms-formsets formsets], ...) is now implemented (extended) within dojango. If you would like to enhance your normal django forms with more enhanced Dojo form elements, you now just simply have to import the forms library from dojango:
 
@@ -57,7 +57,7 @@ The main difference between the Django form fields and the Dojango ones is, that
 
 The widget itself then decides, how each attribute is assigned to the Dojo widget. In the following table you see, which widget is assigned as default to a form field and which validation parameters are possible within that form field:
 
-||**dojango.forms.fields (identical to django.forms.fields)**||**dojango.forms.widgets**||**possible parameters**||
+||**dojango.forms.fields (extended django.forms.fields)**||**dojango.forms.widgets**||**possible parameters**||
 ||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#charfield CharField]||!ValidationTextInput||required, help_text, max_length, min_length||
 ||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#choicefield ChoiceField]||Select||required, help_text||
 ||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#typedchoicefield TypedChoiceField]||Select||required, help_text||
@@ -80,7 +80,7 @@ The widget itself then decides, how each attribute is assigned to the Dojo widge
 ||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#urlfield URLField]||URLTextInput||required, help_text||
 ||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#slugfield SlugField]||!ValidationTextInput||required, help_text||
  
-= Django widgets utilizing Dojo widgets =
+= Dojango widgets utilizing Dojo widgets =
 
 As described above several field attributes are now passed to the widget and the widget evaluates what attribute can be set within the assigned Dojo widget (see Field attribute => Widget attribute column). Dojo widgets support more attributes (for possible attributes see the documentation of each Dojo widget in the [http://api.dojotoolkit.org Dojo API] or the [http://docs.dojocampus.org User documentation of Dojo]) than just validation attributes and it is possible to define those separately. The following example shows, how a form field can be defined with a Dojo widget that has additional attributes ([http://docs.djangoproject.com/en/dev/ref/forms/widgets/#django.forms.Widget.attrs same as for normal html form elements in django]):
 
@@ -93,7 +93,7 @@ As you can see in this example we pass in two additional parameters (`invalidMes
  
 == Overwritten Django's default widgets ==
 
-||**Django widget**||**Dojo widget**||**Field attribute => Widget attribute**||**Notes**||
+||**dojango.forms.widgets (extended django.forms.widgets)**||**Dojo widget**||**Field attribute => Widget attribute**||**Notes**||
 ||[http://docs.djangoproject.com/en/dev/ref/forms/widgets/ Widget]||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit._Widget dijit._Widget]|| || ||
 ||[http://docs.djangoproject.com/en/dev/ref/forms/widgets/ Input]|| || || ||
 ||[http://docs.djangoproject.com/en/dev/ref/forms/widgets/#django.forms.TextInput TextInput]||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.TextBox dijit.form.TextBox]||max_length => maxLength|| ||
@@ -119,7 +119,9 @@ As you can see in this example we pass in two additional parameters (`invalidMes
 
 == Additional widgets ==
 
-||**Django widget**||**Dojo widget**||**Field attribute => Widget attribute**||**Notes**||
+The following widgets don't have an equivalent Django widget.
+
+||**dojango.forms.widgets**||**Dojo widget**||**Field attribute => Widget attribute**||**Notes**||
 ||!SimpleTextarea||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.SimpleTextarea dijit.form.SimpleTextarea]||max_length => maxLength|| ||
 ||!EditorInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.Editor dijit.Editor]|| || ||
 ||!HorizontalSliderInput||[http://api.dojotoolkit.org/jsdoc/HEAD/dijit.form.HorizontalSlider dijit.form.HorizontalSlider]||min_value => minimum<br>max_value => maximum|| ||
