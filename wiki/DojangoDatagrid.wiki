@@ -19,7 +19,7 @@ INSTALLED_APPS = (
 +    'dojango','myapp',
 
 MIDDLEWARE_CLASSES = ( 
-+ 'dojango.middleware.DojoAutoRequireMiddleware',
++ 'dojango.middleware.DojoCollector', # not DojoAutoRequireMiddleware anymore!
 }}}
 
 To deliver the media files you also have to add the URL definitions of dojango to your main URL defintion file (test_dojango/urls.py):
