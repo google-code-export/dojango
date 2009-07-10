@@ -86,7 +86,15 @@ As described above several field attributes are now passed to the widget and the
 
 {{{
 from dojango.forms import *
-my_field = DateField(required=True, help_text="Enter a valid date!", widget=DateInput(attrs={'invalidMessage': 'The date is invalid!', 'class': 'customClass'}))
+my_field = DateField(
+    required=True, 
+    help_text="Enter a valid date!", 
+    widget=DateInput(
+        attrs={
+            'invalidMessage': 'The date is invalid!', 
+            'class': 'customClass'
+        }
+    ))
 }}}
 
 As you can see in this example we pass in two additional parameters (`invalidMessage`, `class`) to the widget. The `required` and the `help_text` attributes itself are passed automatically to the widget and it is not nescessary to define that as an additional parameter.
@@ -94,7 +102,14 @@ As you can see in this example we pass in two additional parameters (`invalidMes
 The resulting HTML for that field would look like this (Dojango is defining Dojo widgets declaratively):
 
 {{{
-<input dojoType="dijit.form.DateTextBox" promptMessage="Enter a valid date!" name="my_field" invalidMessage="The date is invalid!" id="id_my_field" required="true" type="text" class="customClass"/>
+<input dojoType="dijit.form.DateTextBox" 
+    promptMessage="Enter a valid date!" 
+    name="my_field" 
+    invalidMessage="The date is invalid!" 
+    id="id_my_field" 
+    required="true" 
+    type="text" 
+    class="customClass"/>
 }}}
  
 == Overwritten Django's default widgets ==
