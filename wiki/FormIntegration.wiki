@@ -55,7 +55,7 @@ The main difference between the Django form fields and the Dojango ones is, that
 
 The widget itself then decides, how each attribute is assigned to the Dojo widget. In the following table you see, which widget is assigned as default to a form field and which validation parameters are possible within that form field:
 
-||**dojango.forms.fields** (identical to django.forms.fields)||**dojango.forms.widgets**||**possible parameters**||
+||**dojango.forms.fields (identical to django.forms.fields)**||**dojango.forms.widgets**||**possible parameters**||
 ||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#charfield CharField]||!ValidationTextInput||required, help_text, max_length, min_length||
 ||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#choicefield ChoiceField]||Select||required, help_text||
 ||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#typedchoicefield TypedChoiceField]||Select||required, help_text||
@@ -77,6 +77,7 @@ The widget itself then decides, how each attribute is assigned to the Dojo widge
 ||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#ipaddressfield IPAddressField]||IPAddressTextInput||required, help_text||
 ||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#urlfield URLField]||URLTextInput||required, help_text||
 ||[http://docs.djangoproject.com/en/dev/ref/forms/fields/#slugfield SlugField]||!ValidationTextInput||required, help_text||
+
 
 = Django widgets utilizing Dojo widgets =
 
