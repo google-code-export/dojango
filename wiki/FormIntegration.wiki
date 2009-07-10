@@ -2,7 +2,7 @@
 
 Note: The form integration just works with *Django version >= 1.0.2*
 
-Since version 0.4 dojango provides the capability to use Dojo form elements the same as you would use normal forms in Django. The big advantage of this is, that you can e.g. let the user enter a date via a date-picker, let him format a descripton with a rich text editor or let him select an integer value with a number spinner or a slider. Another benefit of using Dojango forms is, that Django's form validation is passed to the Dojo widgets so the entered data can be validated in the frontend with the same validation rules without needing to define them in your !JavaScript code again. Of course you also can define the look and feel of your Dojo widgets by defining DOJANGO_DOJO_THEME in your settings.py (see [Configuration]).
+Since version 0.4 dojango provides the capability to use Dojo form elements the same as you would use normal forms in Django. The big advantage of this is, that you can e.g. let the user enter a date via a date-picker, let him format a descripton with a rich text editor or let him select an integer value with a number spinner or a slider. Another benefit of using Dojango forms is, that Django's form validation is passed to the Dojo widgets so the entered data can be validated in the frontend with the same validation rules without needing to define them in your !JavaScript code again. Of course you also can define the look and feel of your Dojo widgets by [Configuration#DOJANGO_DOJO_THEME_(default:_"tundra") defining the used theme in your settings.py].
 
 Dojango let you define those enhanced Dojo widgets within your Django code. There is not much new to learn, if you use Dojango forms. All form fields, widgets and other [http://docs.djangoproject.com/en/dev/ref/forms/ form functionality] that is available in Django (e.g. [http://docs.djangoproject.com/en/dev/topics/forms/modelforms/#topics-forms-modelforms forms for models], [http://docs.djangoproject.com/en/dev/topics/forms/formsets/#topics-forms-formsets formsets], ...) is now implemented (extended) within dojango. If you would like to enhance your normal django forms with more enhanced Dojo form elements, you now just simply have to import the forms library from dojango:
 
@@ -86,10 +86,16 @@ As described above several field attributes are now passed to the widget and the
 
 {{{
 from dojango.forms import *
-DateField(required=True, widget=DateInput(attrs={'invalidMessage': 'The date is invalid!', 'class': 'customClass'}))
+my_field = DateField(required=True, help_text="Enter a valid date!", widget=DateInput(attrs={'invalidMessage': 'The date is invalid!', 'class': 'customClass'}))
 }}}
 
-As you can see in this example we pass in two additional parameters (`invalidMessage`, `class`) to the widget. The `required` attribute itself is passed automatically to the widget and it is not nescessary to define that as an additional parameter.
+As you can see in this example we pass in two additional parameters (`invalidMessage`, `class`) to the widget. The `required` and the `help_text` attributes itself are passed automatically to the widget and it is not nescessary to define that as an additional parameter.
+
+The resulting HTML for that field would look like this (Dojango is defining Dojo widgets declaratively):
+
+{{{
+<input dojoType="dijit.form.DateTextBox" promptMessage="Enter a valid date!" name="my_field" invalidMessage="The date is invalid!" id="id_my_field" required="true" type="text" class="customClass"/>
+}}}
  
 == Overwritten Django's default widgets ==
 
