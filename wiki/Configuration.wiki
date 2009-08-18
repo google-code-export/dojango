@@ -1,6 +1,6 @@
 #summary Help - How to configure dojango.
 
-*Note: This page refers to the latest version from SVN trunk*, to see this page [http://code.google.com/p/dojango/source/browse/wiki/Configuration.wiki?r=36 for the downloadable dojango-0.3 version please go here]!
+*Note: This page refers to the latest version from SVN trunk*
 
 =Configuration of dojango=
 
@@ -95,10 +95,13 @@ are doing, if you are changing these.
 
 It will use SSL for delivering the Dojo files, when this setting is True and Dojo is loaded via CDN. (Note: just the Google CDN supports https!)
 
-===DOJANGO_BASE_MEDIA_URL (default: /dojango/media)===
+===DOJANGO_DOJO_MEDIA_URL (default: "dojo-media")===
 
-This sets the absolute URL to the media files of dojango. All dojo files
-reside below that.
+Defining a part of the relative URL where all dojo files are served from.
+
+===DOJANGO_BASE_MEDIA_URL (default: /dojango/ + DOJANGO_DOJO_MEDIA_URL)===
+
+This sets the absolute URL to the media files of dojango. This directory acts as the base URL, where all dojo media files are served from.
 
 ===DOJANGO_BUILD_MEDIA_URL (default: DOJANGO_BASE_MEDIA_URL + "/release")===
 
