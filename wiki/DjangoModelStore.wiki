@@ -1,0 +1,9 @@
+#summary Using dojo.data.* with dojango.data.modelstore
+
+= Introduction =
+
+As of r216, Dojango now includes Django-ModelStore as it's Python framework for serializing Django models into dojo.data compatible data stores.
+
+For now, the docs for using this library are hosted at:
+
+http://sites.google.com/site/djangomodelstore/
