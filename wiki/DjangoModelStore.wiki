@@ -20,4 +20,83 @@ These stores all use the same internal structure for store data:
 }
 }}}
 
-For more information on using Dojo's `dojo.data.*` libraries, see the [http://docs.dojocampus.org/dojo/data Dojo documentation]
+For more information on using Dojo's `dojo.data.*` libraries, see the [http://docs.dojocampus.org/dojo/data Dojo documentation].  Due to the way Django ModelStore is structured internally, supporting additional stores with varying formats (XML, CSV, etc) should be rather easy.
+
+<hr />
+
+Django ModelStore uses a declarative style syntax closely mimicking Django's.  Defining a ModelStore should be a familiar experience for anyone used to writing Django Models or Forms
+
+Using Django's `User` model, a basic ModelStore definition looks like:
+
+{{{
+from django.contrib.auth.models import User
+from modelstore import *
+
+class UserStore(Store):
+
+    username      = StoreField()
+    first_name    = StoreField()
+    last_name     = StoreField()
+    full_name     = StoreField( get_value=ObjectMethod('get_full_name') )
+    date_joined   = StoreField( get_value=ValueMethod('strftime', '%Y-%m-%d') )
+    groups        = ReferenceField()
+
+    class Meta(object):
+        objects = User.objects.all()
+        label = 'full_name'
+
+if __name__ == '__main__':
+
+    store = UserStore()
+    print store.to_python()
+}}}
+
+Supposing our User model contained characters from Harry Potter, the above ModelStore would yield the following data structure:
+
+{{{
+{'identifier': 'id', 'label': 'full_name', 'items': [
+    {
+        'id': 'auth.user__1',
+        'username': 'hpotter',
+        'first_name': 'Harry',
+        'last_name': 'Potter',
+        'full_name': 'Harry Potter',
+        'date_joined': '2009-10-01',
+        'groups': [
+            {'_reference': 'auth.group__1'}
+        ]
+    }, {
+        'id': 'auth.user__2',
+        'username': 'hgranger',
+        'first_name': 'Hermione',
+        'last_name': 'Granger',
+        'full_name': 'Hermione Granger',
+        'date_joined': '2009-10-01',
+        'groups': [
+            {'_reference': 'auth.group__1'}
+        ]
+    }, {
+        'id': 'auth.user__3',
+        'username': 'rweasley',
+        'first_name': 'Ronald',
+        'last_name': 'Weasley',
+        'full_name': 'Ronald Weasley',
+        'date_joined': '2009-10-01',
+        'groups': [
+            {'_reference': 'auth.group__1'}
+        ]
+    }, {
+        'id': 'auth.user__4',
+        'username': 'dmalfoy',
+        'first_name': 'Draco',
+        'last_name': 'Malfoy',
+        'full_name': 'Draco Malfoy',
+        'date_joined': '2009-10-01',
+        'groups': [
+            {'_reference': 'auth.group__2'}
+        ]
+    }
+]}
+}}}
+
+If you're familiar with Django's `User` model, then you'll recognize most (or all) of what the ModelStore serializer did when it ran.  If not, don't fret.  There's plenty of documentation to get you started.
