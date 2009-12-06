@@ -178,56 +178,59 @@ def __init__(self, objects=None, stores=None, identifier=None, label=None):
 As can be seen, all the constructor options are optional.
 
     * `objects`
-          o The list (or any iterable ie `QuerySet`) of objects that will fill the store
-          o If an objects option is set in the inner `Meta` class, then it will be overridden by the objects given here.
-          o Setting this option is useful for building a store dynamically based on conditions
+          * The list (or any iterable ie `QuerySet`) of objects that will fill the store
+          * If an objects option is set in the inner `Meta` class, then it will be overridden by the objects given here.
+          * Setting this option is useful for building a store dynamically based on conditions
     * `stores`
-          o The list (or any iterable) of one or more Store instances that will be included in the final store.
-          o If a stores option is set in the inner Meta class, then it will be overridden by the stores given here.
-          o See Combining Stores for more details
-    * identifier
-          o The name of the field in the final data structure that will serve as each item's identifier, as required by dojo.data.api.Identity
-    * label
-          o The name of the field in the final data structure that will serve as each item's label.
+          * The list (or any iterable) of one or more `Store` instances that will be included in the final store.
+          * If a stores option is set in the inner `Meta` class, then it will be overridden by the stores given here.
+          * See Combining Stores for more details
+    * `identifier`
+          * The name of the field in the final data structure that will serve as each item's `identifier`, as required by `dojo.data.api.Identity`
+    * `label`
+          * The name of the field in the final data structure that will serve as each item's label.
 
 
-Getting and setting store options
-It is often useful to change the configuration of a Store instance after the store has been created.  For instance, if you declared a Store with a label attribute name, and later wanted to change it after instantiation, you could use the following accessor methods to do so:
+*Getting and setting store options*
 
-    * get_option( option_name )
-          o Returns the value of the Store option given by option_name.
-          o Raises StoreException if the option isn't set.  (This is different from the option having a value of None.)
-    * set_option( option_name, option_value )
+It is often useful to change the configuration of a `Store` instance after the store has been created.  For instance, if you declared a `Store` with a `label` attribute *name*, and later wanted to change it after instantiation, you could use the following accessor methods to do so:
+
+    * `get_option( _option name_ )`
+          o Returns the value of the `Store` option given by _option name_.
+          o Raises `StoreException` if the option isn't set.  (This is different from the option having a value of `None`.)
+    * `set_option( _option name_, _option value_ )`
           o Sets the value of an option.
-          o If the option is not already set, then it will be set here, unlike get_option which would raise a StoreException.
+          o If the option is not already set, then it will be set here, unlike `get_option` which would raise a `StoreException`.
 
+{{{
 >>> store = MyStore()
 >>> store.set_option('label', 'custom_label_field')
 >>>
-
 >>> store.get_option('label')
 'custom_label_field'
 >>>
-
 >>> store.get_option('some_option')
 traceback ..
 ...
 StoreException: Option "some_option" not set in store
 >>>
-
 >>> store.set_option('some_option', 'some_value')
 >>>
-
 >>> store.get_option('some_option')
 some_value
 >>>
+}}}
 
-The options are stored in the inner Meta class.
+The options are stored in the inner `Meta` class.
 
-Customizing label and identifier generation
-The get_label method
+*Customizing `label` and `identifier` generation*
+
+The `get_label` method
+
+{{{
 def get_label(self, obj):
     ...
+}}}
 
 If it is necessary to customize the generation of labels for objects in the store, then a special get_label method can be defined which should return the correct value.  It will be called once for each object during serialization with the current object as its only argument.
 
