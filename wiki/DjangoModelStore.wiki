@@ -6,7 +6,7 @@ Starting with 0.4.6, Dojango now includes Django ModelStore as its Python framew
 
   * [http://docs.dojocampus.org/dojo/data/ItemFileReadStore dojo.data.ItemFileReadStore]
   * [http://docs.dojocampus.org/dojo/data/ItemFileWriteStore dojo.data.ItemFileWriteStore]
-  * dojox.data.QueryReadStore
+  * [http://docs.dojocampus.org/dojox/data/QueryReadStore dojox.data.QueryReadStore]
 
 These stores all use the same internal structure for store data:
 
