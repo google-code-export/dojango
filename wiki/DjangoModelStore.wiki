@@ -156,7 +156,7 @@ You'll notice that instead of calling `to_python()`, we called `to_json()` on th
 
 = Stores =
 
-*The Store class*
+== The Store class ==
 
 Every model store inherits from the base `Store` class.
 
@@ -191,16 +191,16 @@ As can be seen, all the constructor options are optional.
           * The name of the field in the final data structure that will serve as each item's label.
 
 
-*Getting and setting store options*
+=== Getting and setting store options ===
 
 It is often useful to change the configuration of a `Store` instance after the store has been created.  For instance, if you declared a `Store` with a `label` attribute *name*, and later wanted to change it after instantiation, you could use the following accessor methods to do so:
 
     * `get_option( _option name_ )`
-          o Returns the value of the `Store` option given by _option name_.
-          o Raises `StoreException` if the option isn't set.  (This is different from the option having a value of `None`.)
+          * Returns the value of the `Store` option given by _option name_.
+          * Raises `StoreException` if the option isn't set.  (This is different from the option having a value of `None`.)
     * `set_option( _option name_, _option value_ )`
-          o Sets the value of an option.
-          o If the option is not already set, then it will be set here, unlike `get_option` which would raise a `StoreException`.
+          * Sets the value of an option.
+          * If the option is not already set, then it will be set here, unlike `get_option` which would raise a `StoreException`.
 
 {{{
 >>> store = MyStore()
@@ -223,19 +223,20 @@ some_value
 
 The options are stored in the inner `Meta` class.
 
-*Customizing `label` and `identifier` generation*
+=== Customizing `label` and `identifier` generation ===
 
-The `get_label` method
+==== The `get_label` method ====
 
 {{{
 def get_label(self, obj):
     ...
 }}}
 
-If it is necessary to customize the generation of labels for objects in the store, then a special get_label method can be defined which should return the correct value.  It will be called once for each object during serialization with the current object as its only argument.
+If it is necessary to customize the generation of labels for objects in the store, then a special `get_label` method can be defined which should return the correct value.  It will be called once for each object during serialization with the current object as its only argument.
 
 Example:
 
+{{{
 class UserStore(Store):
 
     first_name = StoreField()
@@ -249,9 +250,11 @@ class UserStore(Store):
         if obj.is_superuser:
             return '%s (%s)' % (obj.get_full_name(), 'Superuser')
         return obj.get_full_name()
+}}}
 
 This will yield:
 
+{{{
 {'identifier': 'id', 'label': 'label', 'items': [
     {
         'id': 'auth.user__1',
@@ -265,44 +268,54 @@ This will yield:
         'label': 'Draco Malfoy',
     }
 ]}
+}}}
 
-If no label field is designated in the store, then label will be used.  By default, the Store base class defines a get_label method that tries to return the object's __unicode__() output, and falls back to the object's identifier.
+If no `label` field is designated in the store, then `label` will be used.  By default, the `Store` base class defines a `get_label` method that tries to return the object's `__unicode__()` output, and falls back to the object's `identifier`.
 
-The get_identifier method
-Under normal circumstance, overriding get_identifier should not be required.  However, it is necessary to do so if you are serializing objects that are not Django models.  ModelStore can be used with any kind of object that defines the values for the store as simple attributes (anything returnable by a getattr()).  Since the default get_identifier method is particular to Django models, it would be necessary to override this method with something like the following:
+==== The `get_identifier` method ====
 
+Under normal circumstance, overriding `get_identifier` should not be required.  However, it is necessary to do so if you are serializing objects that are not Django models.  ModelStore can be used with any kind of object that defines the values for the store as simple attributes (anything returnable by a `getattr()`).  Since the default `get_identifier` method is particular to Django models, it would be necessary to override this method with something like the following:
+
+{{{
 def get_identifier(self, obj):
     try:
         self.cur_num += 1
     except AttributeError:
         self.cur_num = 1
     return self.cur_num
+}}}
 
 This just keeps a running count of objects in the store.  Of course, a more meaningful identifier could be returned but that would be dependent on the objects being serialized.  This simple count approach would also break the store if the same algorithm were used with combined stores.
 
-Adding extra stores
+==== Adding extra stores ====
 See Combining Stores for more details.
 
-You can use the add_store method to dynamically add stores at runtime.  It accepts one or more Store objects (instances or not) as its argument(s).
+You can use the `add_store` method to dynamically add stores at runtime.  It accepts one or more `Store` objects (instances or not) as its argument(s).
 
 Example:
 
+{{{
 >>> store = MyStore()
 >>> store.add_store( StoreA, StoreB(), store_c, StoreD( objects=My.objects.all() ), ... )
 >>>
+}}}
 
-Rendering a Store
-Getting the final data structure after serializing a Store can be done in a few different ways.
+==== Rendering a Store ====
 
-The to_python method
-The to_python() method accepts one optional argument, objects.
+Getting the final data structure after serializing a `Store` can be done in a few different ways.
 
+===== The `to_python` method =====
+
+The `to_python()` method accepts one optional argument, `objects`.
+
+{{{
 >>> store = MyStore()
 >>> store.to_python()
 {'identifer': 'id', 'label': 'label', 'items': [
     ...
 ]}
 >>>
+}}}
 
 If an objects argument is passed, then those objects will be used to fill the store, but ONLY during that iteration.  The previous objects setting will be restored when serialization is finished.  This is useful if you want to create separate and independent data structures (client-side stores) based on some subset of data.
 
