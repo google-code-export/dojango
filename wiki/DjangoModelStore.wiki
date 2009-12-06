@@ -32,7 +32,7 @@ Using Django's `User` model, a basic ModelStore definition looks like:
 
 {{{
 from django.contrib.auth.models import User
-from modelstore import *
+from dojango.data.modelstore import *
 
 class UserStore(Store):
 
@@ -53,7 +53,7 @@ if __name__ == '__main__':
     print store.to_python()
 }}}
 
-Supposing our User model contained characters from Harry Potter, the above ModelStore would yield the following data structure:
+Supposing our `User` model contained characters from Harry Potter, the above ModelStore would yield the following data structure:
 
 {{{
 {'identifier': 'id', 'label': 'full_name', 'items': [
@@ -102,3 +102,887 @@ Supposing our User model contained characters from Harry Potter, the above Model
 }}}
 
 If you're familiar with Django's `User` model, then you'll recognize most (or all) of what the ModelStore serializer did when it ran.  If not, don't fret.  There's plenty of documentation to get you started.
+
+= Getting Started =
+
+A basic ModelStore class looks like the following:
+
+{{{
+from django.contrib.auth.models import User
+from dojango.data.modelstore import *
+
+class UserStore(Store):
+
+    first_name   = StoreField()
+    last_name    = StoreField()
+    full_name    = StoreField( get_value=ObjectMethod('get_full_name') )
+
+    class Meta(object):
+        objects  = User.objects.all()
+        label    = 'full_name'
+
+if __name__ == '__main__':
+
+    store = UserStore()
+    print store.to_python()
+}}}
+
+As shown earlier, the output of the `to_python()` method yields the following data structure:
+
+{{{
+{'identifier': 'id', 'label': 'full_name', 'items': [
+    {
+        'id': 'auth.user__1',
+        'first_name': 'Harry',
+        'last_name': 'Potter',
+        'full_name': 'Harry Potter',
+    }
+]}
+}}}
+
+You'll recognize the format of the output as that of Dojo's `ItemFileReadStore`, `ItemFileWriteStore`, `QueryReadStore` etc.
+
+A typical Django view function that returns data from this store might look like:
+
+{{{
+def user_store(request):
+
+    store = UserStore()
+    return HttpResponse( '{}&&\n' + store.to_json(), mimetype='application/json' )
+}}}
+
+You'll notice that instead of calling `to_python()`, we called `to_json()` on the `store` object.  This simply ran the previous output through `simplejson.dumps()` before returning it.  We prepended the output with `'{}&&\n'` before giving  it to the browser to help Dojo prevent JSON hijacking attacks.  Dojo will handle this output with ease.  So in the browser, your `DataGrid`, or `FilteringSelect`, or any `dojo.data`-aware Dijit will have an item, Harry Potter, to play with.
+
+
+= Stores =
+
+*The Store class*
+
+Every model store inherits from the base `Store` class.
+
+{{{
+from dojango.data.modelstore.stores import Store
+
+class MyStore(Store):
+
+    ...
+}}}
+
+The `Store` instance constructor looks like:
+
+{{{
+def __init__(self, objects=None, stores=None, identifier=None, label=None):
+    ...
+}}}
+
+As can be seen, all the constructor options are optional.
+
+    * `objects`
+          o The list (or any iterable ie `QuerySet`) of objects that will fill the store
+          o If an objects option is set in the inner `Meta` class, then it will be overridden by the objects given here.
+          o Setting this option is useful for building a store dynamically based on conditions
+    * `stores`
+          o The list (or any iterable) of one or more Store instances that will be included in the final store.
+          o If a stores option is set in the inner Meta class, then it will be overridden by the stores given here.
+          o See Combining Stores for more details
+    * identifier
+          o The name of the field in the final data structure that will serve as each item's identifier, as required by dojo.data.api.Identity
+    * label
+          o The name of the field in the final data structure that will serve as each item's label.
+
+
+Getting and setting store options
+It is often useful to change the configuration of a Store instance after the store has been created.  For instance, if you declared a Store with a label attribute name, and later wanted to change it after instantiation, you could use the following accessor methods to do so:
+
+    * get_option( option_name )
+          o Returns the value of the Store option given by option_name.
+          o Raises StoreException if the option isn't set.  (This is different from the option having a value of None.)
+    * set_option( option_name, option_value )
+          o Sets the value of an option.
+          o If the option is not already set, then it will be set here, unlike get_option which would raise a StoreException.
+
+>>> store = MyStore()
+>>> store.set_option('label', 'custom_label_field')
+>>>
+
+>>> store.get_option('label')
+'custom_label_field'
+>>>
+
+>>> store.get_option('some_option')
+traceback ..
+...
+StoreException: Option "some_option" not set in store
+>>>
+
+>>> store.set_option('some_option', 'some_value')
+>>>
+
+>>> store.get_option('some_option')
+some_value
+>>>
+
+The options are stored in the inner Meta class.
+
+Customizing label and identifier generation
+The get_label method
+def get_label(self, obj):
+    ...
+
+If it is necessary to customize the generation of labels for objects in the store, then a special get_label method can be defined which should return the correct value.  It will be called once for each object during serialization with the current object as its only argument.
+
+Example:
+
+class UserStore(Store):
+
+    first_name = StoreField()
+    last_name = StoreField()
+
+    class Meta(object):
+        objects = User.objects.all()
+
+    def get_label(self, obj):
+
+        if obj.is_superuser:
+            return '%s (%s)' % (obj.get_full_name(), 'Superuser')
+        return obj.get_full_name()
+
+This will yield:
+
+{'identifier': 'id', 'label': 'label', 'items': [
+    {
+        'id': 'auth.user__1',
+        'first_name': 'Harry',
+        'last_name': 'Potter',
+        'label': 'Harry Potter (Superuser)',
+    }, {
+        'id': 'auth.user__2',
+        'first_name': 'Draco',
+        'last_name': 'Malfoy',
+        'label': 'Draco Malfoy',
+    }
+]}
+
+If no label field is designated in the store, then label will be used.  By default, the Store base class defines a get_label method that tries to return the object's __unicode__() output, and falls back to the object's identifier.
+
+The get_identifier method
+Under normal circumstance, overriding get_identifier should not be required.  However, it is necessary to do so if you are serializing objects that are not Django models.  ModelStore can be used with any kind of object that defines the values for the store as simple attributes (anything returnable by a getattr()).  Since the default get_identifier method is particular to Django models, it would be necessary to override this method with something like the following:
+
+def get_identifier(self, obj):
+    try:
+        self.cur_num += 1
+    except AttributeError:
+        self.cur_num = 1
+    return self.cur_num
+
+This just keeps a running count of objects in the store.  Of course, a more meaningful identifier could be returned but that would be dependent on the objects being serialized.  This simple count approach would also break the store if the same algorithm were used with combined stores.
+
+Adding extra stores
+See Combining Stores for more details.
+
+You can use the add_store method to dynamically add stores at runtime.  It accepts one or more Store objects (instances or not) as its argument(s).
+
+Example:
+
+>>> store = MyStore()
+>>> store.add_store( StoreA, StoreB(), store_c, StoreD( objects=My.objects.all() ), ... )
+>>>
+
+Rendering a Store
+Getting the final data structure after serializing a Store can be done in a few different ways.
+
+The to_python method
+The to_python() method accepts one optional argument, objects.
+
+>>> store = MyStore()
+>>> store.to_python()
+{'identifer': 'id', 'label': 'label', 'items': [
+    ...
+]}
+>>>
+
+If an objects argument is passed, then those objects will be used to fill the store, but ONLY during that iteration.  The previous objects setting will be restored when serialization is finished.  This is useful if you want to create separate and independent data structures (client-side stores) based on some subset of data.
+
+>>> store = UserStore()
+>>> staff_store = store.to_python( objects=User.objects.filter(is_staff=True) )
+>>> user_store =  store.to_python( objects=User.objects.filter(is_staff=False) )
+>>>
+
+This example is somewhat unnecessary since we could just add an is_staff field to the Store definition and let the filtering happen dynamically, but you get the idea.
+
+The to_python() method returns the data serialized as a native Python object, (dict usually).
+
+The to_json method
+to_json is exactly like to_python except it accepts more than just an objects argument, and returns a JSON-encoded version of the final data structure.  Any argument passed to to_json (other than the keyword arg objects) is passed to simplejson.dumps().  This is useful if you want to provide special JSON serialization parameters or use a custom JSON encoder, (like Django's DjangoJSONEncoder in the django.core.serializers package.)
+
+By default, a Store's __str__() and __repr__() methods both return the output of to_json().
+
+
+Meta (options)
+The inner Meta class is exactly like Django's Meta class on Model definitions.  It serves to hold store-wide configuration options.  The following options are available:
+
+    * objects
+          o The list (or any iterable ie QuerySet) of objects that will fill the store
+    * stores
+          o One or more Store objects that will be combined into this store.
+          o See Combining Stores for details
+    * label
+          o The field in the store that will serve as an item's label attribute.
+          o If label = None, then no label attribute will be set.
+          o A custom label can be given that does not correspond to a field.  In that case, the get_label method will determine the value.
+    * identifier
+          o identifier is different than label in that it should not collide with an existing store field.  This field is used to uniquely identify an item.  The default get_identifier method just returns a string of the form: <app>.<model>__<pk>
+    * service
+          o An instance of modelstore.services.BaseService
+          o By default, every Store instance gets a JsonService (which wont be used if no service methods are defined.)
+          o This will serve as the service method dispatcher (if service methods are used)
+          o See Services for details
+
+All of these options can be accessed or set at runtime with the get_option and set_option Store methods.
+
+
+Combining Stores
+If is often useful to combine the serialized data of two or more stores into one single data structure for consumption by the client.  This is actually required in order to use ReferenceFields effectively when the references span objects of more than one 'type' – such as referencing two separate Django models via ForeignKey, ManyToManyField, etc.  In order for Dojo to recognize a referenced item, that item must be in the same store as the item that references it.
+
+Here's an example:
+
+from django.contrib.auth.models import User, Group
+from modelstore import *
+
+class UserStore(Store):
+
+    full_name    = StoreField( get_value=ObjectMethod('get_full_name') )
+    groups       = ReferenceField()
+
+    class Meta(object):
+        objects  = User.objects.all()
+        label    = 'full_name'
+
+class GroupStore(Store):
+
+    name    = StoreField()
+    users   = ReferenceField(model_field='user_set')
+
+    class Meta(object):
+        objects = Group.objects.all()
+        label = 'name'
+
+class UserGroupStore(Store):
+
+    class Meta(object):
+        stores = (UserStore, GroupStore)
+
+if __name__ == '__main__':
+
+    store = UserGroupStore()
+    print store.to_python()
+
+The result of calling to_python() on the UserGroupStore instance looks like:
+
+{'identifier': 'id', 'label': 'label', 'items': [
+    {
+        'id': 'auth.user__1',
+        'full_name': 'Harry Potter',
+        'label': 'Harry Potter',
+        'groups': [
+            {'_reference': 'auth.group__1'},
+        ]
+    },{
+        'id': 'auth.user__2',
+        'full_name': 'Hermione Granger',
+        'label': 'Hermione Granger',
+        'groups': [
+            {'_reference': 'auth.group__1'},
+        ]
+    },{
+        'id': 'auth.user__3',
+        'full_name': 'Draco Malfoy',
+        'label': 'Draco Malfoy',
+        'groups': [
+            {'_reference': 'auth.group__2'},
+        ]
+    },{
+        'id': 'auth.group__1',
+        'name': 'Gryffindor',
+        'label': 'Gryffindor',
+        'users': [
+            {'_reference': 'auth.user__1'},
+            {'_reference': 'auth.user__2'},
+        ]
+    },{
+        'id': 'auth.group__2',
+        'name': 'Slytherin',
+        'label': 'Slytherin',
+        'users': [
+            {'_reference': 'auth.user__3'},
+        ]
+    }
+]}
+
+
+You can see that both stores were combined into a single data structure.  Unfortunately not many client-side data stores have the ability to handle multi-attribute identifier or label fields so the combined store simply sets a generic label across both stores, label, even though each store specifies that a particular field should be used.  But since one store uses full_name and the other uses name, the serializer set a separate field aside as the label and copied the requested values into it.  The same is true for identifier fields.  You can avoid this redundancy by structuring your Store definition with this in mind.  For instance, if instead of using the attribute name full_name on the UserStore, you simply used name, then you could specify in each store that the label field is name, which would cause the serializer to skip adding a dedicated label field.
+
+A combined store is just a regular Store object like any other.  You can give it fields, objects, service methods or anything else that goes in a Store.  With this in mind, we could restructure the above example to look like this:
+
+class UserStore(Store):
+
+    name    = StoreField( get_value=ObjectMethod('get_full_name') )
+    groups    = ReferenceField()
+
+    class Meta(object):
+        objects = User.objects.all()
+        label = 'name'
+
+class GroupStore(Store):
+
+    name    = StoreField()
+    users    = ReferenceField('user_set')
+
+    class Meta(object):
+        objects = Group.objects.all()
+        stores = (UserStore,)
+        label = 'name'
+
+if __name__ == '__main__':
+
+    store = GroupStore()
+    print store.to_python()
+
+
+This yields almost identical results as the previous example.  The difference being that instead of a dedicated label field, we now simply have the name field set as the items' label attribute.
+
+{'identifier': 'id', 'label': 'name', 'items': [
+    ...
+]}
+
+
+Using service methods with combined stores
+It is perfectly possible to use service methods with combined stores.  When a service method is declared on a store which is subsequently added to another store via the stores Meta option, that method stays attached to the original store.  When a request comes in from the client to invoke that service method, the request is routed to the original store's service for dispatching.  If the service method is bound to the store, (ie takes a self argument,) then it will be passed a reference to the Store instance on which it is bound, not the combined store.  The same is true for unbound service methods, (takes a store= argument in the @servicemethod decorator.)  This provides a convenient way to declare certain remote functionality on an individual store without interfering with another store in the pool.
+
+When two store's declare a service method of the same remote name, then a ServiceException will be raised if an attempt is made to combine them into a single store.  If this were allowed to proceed then only the LAST method added would be available remotely, but the dispatcher might invoke the wrong service method when a request comes in.  This can be avoided by naming service methods uniquely when intending to use them in a combined store.
+
+class UserStore(Store):
+
+    first_name  = StoreField()
+    last_name   = StoreField()
+    name        = StoreField( get_value=ObjectMethod('get_full_name') )
+    groups      = ReferenceField()
+
+    class Meta(object):
+        objects = User.objects.all()
+        label   = 'name'
+
+    @servicemethod('setName')
+    def set_name(self, request, user_ident, first_name, last_name):
+        """ Sets a user's first and last name
+        """
+
+        try:
+            user = get_object_from_identifier(user_ident, valid=User)
+
+        except StoreException:
+            raise Exception('Invalid Request')
+
+        except User.DoesNotExist:
+            raise Exception('Unknown User')
+
+        user.first_name = first_name
+        user.last_name  = last_name
+        user.save()
+
+        return True
+
+class GroupStore(Store):
+
+    name    = StoreField()
+    users   = ReferenceField('user_set')
+
+    class Meta(object):
+        objects = Group.objects.all()
+        label = 'name'
+        stores = (UserStore,)
+
+    @servicemethod('setGroupName')
+    def set_name(self, request, group_ident, name):
+        """ Sets a group's name
+        """
+
+        try:
+            group = get_object_from_identifier(group_ident, valid=Group)
+
+        except StoreException:
+            raise Exception('Invalid Request')
+
+        except Group.DoesNotExist:
+            raise Exception('Unknown Group')
+
+        try:
+            group.name = name
+            group.save()
+        except IntegrityError: # Group model has unique=True for 'name'
+            raise Exception('Cannot set name "%s", group names must be unique' % name)
+
+        return True
+
+
+Both stores declared a method set_name but GroupStore declared the remote name as setGroupName, whereas UserStore declared it as just setName.  This is perfectly fine and wont raise a ServiceException since the remote name is how the methods are identified internally.
+
+
+ModelQueryStore
+ ModelQueryStore is a special subclass of Store designed to work with dojox.data.QueryReadStore.
+
+from django.contrib.auth.models import User, Group
+from modelstore import *
+
+class UserStore(ModelQueryStore):
+
+    username    = StoreField()
+    name        = StoreField('get_full_name')
+    first_name  = StoreField()
+    last_name   = StoreField()
+
+    class Meta(object):
+        objects = User.objects.all()
+        objects_per_query = 25
+        label = 'name'
+
+    def filter_objects(self, request, objects, query):
+        """ Filter the objects based on attributes in query
+        """
+        filters = {}
+
+        username = query.get('username')
+        if username:
+            # Ignore the '*' on the query ( /?username=bilbo* ...)
+            filters['username__icontains'] = username.replace('*', '')
+
+        first_name = query.get('first_name')
+        if first_name:
+            filters['first_name__icontains'] = first_name.replace('*', '')
+
+        last_name = query.get('last_name')
+        if last_name:
+            filters['last_name__icontains'] = last_name.replace('*', '')
+
+        return objects.filter(**filters)
+
+    def sort_objects(self, request, objects, sort_field, descending):
+        """ Return an ordered query given sort_field and descending
+
+            dojox.data.QueryReadStore only supports sorting by a single field
+        """
+        if descending:
+            sort_field = '-' + sort_field
+        return objects.order_by(sort_field)
+
+A typical Django view function for this store looks like:
+
+from stores import UserStore
+
+def user_store(request):
+
+    store = UserStore()
+
+    # Invoke store's __call__ method to handle the request
+    data = simplejson.dumps( store(request) )
+    return HttpResponse('{}&&\n' + data, mimetype='application/json')
+
+ModelQueryStore's __call__ method is the main entry point for handling requests for data.  It will automatically handle paging (using Django's Paginator class) and call the filter_objects and sort_objects methods to get filtered/sorted data.
+Store Options:
+objects_per_query
+The number of objects that will be returned per query.  This should be the same as the rowsPerPage option in dojox.grid.DataGrid (if used.)  Attempts by the client to retrieve more objects than this (via the count option to QueryReadStore) will fail.  This is the MAXIMUM number of objects returnable to prevent returning 1 million objects and DOSing your app.
+Methods:
+filter_objects(self, request, objects, query)
+Overridable method used to filter the objects based on the query string parameters.
+
+sort_objects(self, request, objects, sort_field, descending)
+Overridable method used to sort the objects based on the requested sort_field.  sort_objects is called after filter_objects.
+
+
+StoreField
+A StoreField is the crux of any ModelStore definition.  It defines what actual data will populate the final store.
+
+The StoreField constructor looks like:
+
+def __init__(self, model_field=None, store_field=None, get_value=None, sort_field=None, can_sort=True)
+    ...
+
+All arguments are optional.
+
+    * model_field
+          o The attribute on the object that holds the data for this field
+          o Defaults to the attribute name given to this field in the Store if not provided.
+    * store_field
+          o The name of the field in the final data structure.
+          o Defaults to the attribute name given to this field in the Store if not provided.
+    * get_value
+          o A reference to a callable (function, method, etc) or instance of modelstore.methods.BaseMethod that will return the value of this field
+          o See Methods for details
+    * sort_field
+          o Returns the string that should be passed to QuerySet.order_by() when requests come in to sort by this field.  '-' will be prepended to the string automatically if descending order is requested.
+    * can_sort
+          o Denotes whether requests to sort by this field should be honored, or ignored.
+
+
+If a StoreField is defined without any arguments, then it will look for it's data as the value of a simple attribute on the current object.
+
+Example:
+
+class UserStore(Store):
+
+    username = StoreField()
+
+    class Meta(object):
+        objects = User.objects.all()
+
+The username field will be populated by the username attribute on each User object.
+
+In some cases, you might want to alias a store_field to a model_field.  This is useful if you already have code on the client side that expects certain field names that don't match one-to-one to your model fields.
+
+For instance, if we need the username field to appear as user_name in the final store, we could do:
+
+user_name = StoreField(model_field='username')
+or:
+username = StoreField(store_field='user_name')
+
+The attribute name in the Store is always a fallback.  If you specify store_field and model_field manually, then you can name the attribute anything you want:
+
+crazy_attribute_name = StoreField( model_field='username', store_field='user_name' )
+
+
+model_field can also handle dotted attributes (attributes of attributes)
+
+name = StoreField('attr.attr.name')
+
+
+ReferenceField
+A ReferenceField is like a StoreField except it generates special _reference items that will be used by client-side store code to handle items with relationships to other items (like ForeignKey, ManyToManyField).
+
+A typical example of using a ReferenceField is:
+
+class UserStore(Store):
+
+    groups = ReferenceField()
+
+    class Meta(object):
+        objects = User.objects.all()
+
+class GroupStore(Store):
+
+    users = ReferenceField('user_set')
+
+    class Meta(object):
+        objects = Group.objects.all()
+        stores = (UserStore,)
+
+
+These stores generate items like:
+
+{'_reference': 'auth.group__1'},
+{'_reference': 'auth.group__2'},
+{'_reference': 'auth.user__1'},
+{'_reference': 'auth.user__2'},
+
+A ReferenceField will return a list of _reference items (if more than one ie ManyToManyField) or a single dict (ie ForeignKey, OneToOneField.)
+
+A ReferenceField accepts the same options as a regular StoreField.
+
+
+Methods
+It is often desired to populate a field in a Store with arbitrary data, not necessarily coming from a model_field.  In these cases, you can exercise the get_value parameter to a StoreField in order to provide some derived value to populate the field.
+
+Example:
+
+def get_datetime():
+    return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+class MyStore(Store):
+
+    date_time = StoreField( get_value=get_datetime )
+
+    ...
+
+If you need to pass arguments to the get_value= method, then you need to wrap your callable in an instance of Method:
+
+def get_datetime(fmt='%Y-%m-%d %H:%M:%S'):
+    return datetime.now().strftime(fmt)
+
+class MyStore(Store):
+
+    date_time = StoreField( get_value=Method(get_datetime, fmt='%Y-%m-%d') )
+
+    ...
+
+The first argument to Method should be either a reference to the function/method object itself, or a string version that can be eval()'d to get it.  All other args and kwargs are passed as-is to your method.
+Passing special or "proxied" arguments
+ModelStore stores references to certain special objects during the serialization phase so they can be passed to get_value= methods for processing.
+
+These special arguments are:
+
+    * ObjectArg
+          o A reference to the current object being serialized
+    * RequestArg
+          o A reference to the current Request object (as used in Django view functions)
+          o May be None if not passed into the store initially
+    * ModelArg
+          o A reference to the Model being serialized.  (basically ObjectArg.__class__)
+    * StoreArg
+          o A reference to the current store instance
+    * FieldArg
+          o A reference to the field instance which the get_value= method is defined.
+
+Example:
+
+def get_num_groups(user):
+    return user.groups.count()
+
+class UserStore(Store):
+
+    num_groups = StoreField( get_value=Method(get_num_groups, ObjectArg) )
+
+    ...
+
+The method above for getting the number of groups for a given user is somewhat convoluted since StoreField can handle dotted attributes and model_fields that are callable:
+
+>>> num_groups = StoreField('groups.count')
+
+But you get the idea.
+
+
+ObjectMethod
+ObjectMethod is a special subclass of Method that looks for the given method as an attribute of the current object being serialized.
+
+Example:
+
+class UserStore(Store):
+
+    full_name = StoreField( get_value=ObjectMethod('get_full_name') )
+
+    ...
+
+Since Django's User model defines an instance method get_full_name(), we can call it for each object using an ObjectMethod.
+
+>>> date_joined = StoreField( get_value=ObjectMethod('date_joined.strftime', '%Y-%m-%d') )
+
+The User model's date_joined attribute returns an instance of datetime.datetime, which has a method strftime.  Using an ObjectMethod, we can access strftime directly and pass it a format string.
+
+
+ValueMethod
+ValueMethod is a special subclass of Method that looks for the given method as an attribute of the value of a given field.
+
+Example:
+
+class UserStore(Store):
+
+    first_name = StoreField( get_value=ValueMethod('upper') )
+    last_name = StoreField( get_value=ValueMethod('upper') )
+
+    ...
+
+This will call the the string method upper() on the value of first_name and last_name.  This will cause the first_name and last_name of all the store items to be uppercase.
+
+>>> date_joined = StoreField( get_value=ValueMethod('strftime', '%Y-%m-%d %H:%M:%S') )
+
+This will render the date_joined value as a readable string.
+
+
+StoreMethod
+StoreMethod is a special subclass of Method that looks for the given method as an attribute on the current Store instance.
+
+Example:
+
+class UserStore(Store):
+
+    has_groups = StoreField( get_value=StoreMethod('has_groups', ObjectArg) )
+
+    class Meta(object):
+        objects = User.objects.all()
+
+    def has_groups(self, user):
+        return bool( user.groups.count() )
+        
+        
+ModelMethod
+ModelMethod is a special subclass of Method that looks for the given method as a class-level attribute of the current object.
+
+Example:
+
+class UserStore(Store):
+
+    class_name = StoreField( get_value=ModelMethod('__name__') )
+
+    ...
+
+Admittedly, this is a useless example.  But it demonstrates how you can use ModelMethod to access arbitrary attributes on an object's class.  It would simply return 'User'.  This can be used by advanced users to build a ModelStore entirely at runtime.
+
+
+@servicemethod
+ModelStore has the ability to export methods to the client via RPC (JSON/XML) that can be used to interact with the data in the store.  Currently only a JSON-RPC version 1.1 service is implemented, but other service types are certainly possible.
+
+To mark a store method for exporting, simply decorate it with the @servicemethod decorator:
+
+from django.contrib.auth.models import User, Group
+from modelstore import *
+
+class UserStore(Store):
+
+    first_name = StoreField()
+    last_name = StoreField()
+
+    class Meta(object):
+        objects = User.objects.all()
+
+    @servicemethod
+    def set_name(self, request, user_identifier, first_name, last_name):
+
+        try:
+            user = get_object_from_identifier(user_identifier, valid=User)
+
+        except StoreException:
+            raise Exception('Invalid Request')
+
+        except User.DoesNotExist:
+            raise Exception('Unknown User')
+
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
+
+        return True
+
+By decorating set_name with @servicemethod, we made it available remotely via a JSON-RPC v1.1 service.
+
+@servicemethod can be used with or without arguments.
+
+It accepts the following arguments:
+
+    * name (optional)
+          o The name of this method as seen remotely.
+    * store (optional unless decorating a function/method outside a Store instance)
+          o A reference to the Store this method operates on.
+          o This is required if the method is a regular function, a staticmethod or otherwise defined outside a Store instance (ie doesn't take a self argument)
+    * store_arg (optional)
+          o Specifies whether this method should be passed the Store instance as the first argument (default is True so that servicemethods bound to a Store instance can get a proper self reference.)
+    * request_arg (optional)
+          o Specifies whether this method should be passed a reference to the current Request object.  (Default is True)
+
+If both store_arg and request_arg are True, then the store will be passed first, then the request (to appease bound store methods that need a self as the first arg.)  If only one is True then that one will be passed first.  This is useful for using standard Django view functions as servicemethods since they require the request as the first argument.
+
+Resolving store items back into Django model instances
+Often, a service method will be called remotely that needs to act on a specific object.  In the example code above, the client calls the service method set_name with the identifier of a specific object, as well as the new values of first_name and last_name.
+
+Since requests like these are so common, ModelStore implements a helper function called get_object_from_identifier to assist with retrieving specific model instances.
+
+def get_object_from_identifier(identifier, valid=None):
+    ...
+
+The default identifier attribute for all Stores is a string of the form:
+
+<appname>.<modelname>__<pk>
+
+get_object_from_identifier uses django.db.models.get_model() to obtain the Model class for the item.  If this fails, then a StoreException is raised.  If a valid= keyword argument is provided then the model returned by get_model() must match the model supplied as valid or a StoreException will be raised.  This is useful to prevent accidental (or intentional) access to models that should not be accessed via blind calls to get_model().
+
+The object will then be looked up by its primary key attribute.  If this fails, then <Model>.DoesNotExist will be raised.
+
+
+BaseService
+Every service on a Store object should derive from BaseService.  This class provides the underlying machinery to route remote method calls to the correct @servicemethod methods.  New services can be implemented by subclassing BaseService and overriding the following public methods:
+
+    * process_request
+          o This is usually the entry point for remote method calls
+          o It accepts one argument, the current request object
+          o def process_request(self, request)
+    * process_response
+          o This method returns a non-error response to the caller
+          o It accepts as arguments the id of the remote method call and the result
+          o def process_response(self, id, result)
+    * process_error
+          o This method returns an error response to the caller
+          o It accepts as arguments the id of the remote method call, the error code and error message
+          o def process_error(self, id, error_code, error_message)
+    * get_smd
+          o This method returns a Service Method Description to remote clients
+          o It accepts one argument, the URL at which the service methods can be called
+          o def get_smd(self, url)
+
+See the implementation of JsonService for a working example of how to implemement a conforming store service.
+
+
+JsonService
+JsonService implements a JSON-RPC v1.1 service.  This service can be used out-of-the-box with Dojo's dojo.rpc.JsonService class.  This is the default service added to all Store instances.
+
+Example:
+
+from django.contrib.auth.models import User
+from modelstore import *
+
+class UserStore(Store):
+
+    username = StoreField()
+    first_name = StoreField()
+    last_name = StoreField()
+
+    class Meta(object):
+        objects = User.objects.all()
+        service = JsonService() # Not exactly required since this is set by default
+
+    @servicemethod(name='setName')
+    def set_name(self, request, user_ident, first_name, last_name):
+        """ Sets a User's first and last name
+        """
+
+        try:
+            user = get_object_from_identifier(user_ident, valid=User)
+
+        except StoreException:
+            raise Exception('Invalid Request')
+
+        except User.DoesNotExist:
+            raise Exception('Unknown User')
+
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
+
+        return True
+
+Example Django view functions to handle requests to this store:
+
+from django.http import HttpResponse
+from myapp.stores import UserStore
+
+def user_store(request):
+
+    store = UserStore()
+    return HttpResponse('{}&&\n' + store.to_json(), mimetype='application/json')
+
+def user_store_service(request):
+
+    store = UserStore()
+    return HttpResponse('{}&&\n' + store.service(request), mimetype='application/json')
+
+Hook these views into the URLConf:
+
+...
+    url(r'^user-store/$', 'myapp.views.user_store', name='user-store'),
+    url(r'^user-store/service/$', 'myapp.views.user_store_service', name='user-store-service'),
+...
+
+Client-side:
+
+>>> var store = new dojo.data.ItemFileWriteStore({url: '/user-store/'});
+>>> store.service = new dojo.rpc.JsonService('/user-store/service/');
+>>> var user = store._arrayOfAllItems[0]; /* Get a user */
+>>> store.service.setName( store.getIdentity(user), 'Bilbo', 'Baggins')
+            .addCallback( function(result) {
+                /* Update the client-side */
+                store.setValue(user, 'first_name', 'Bilbo');
+                store.setValue(user, 'last_name', 'Baggins');
+            })
+            .addErrback( function(error) {
+                /* Handle error */
+                console.error(error.message);
+            });
+>>>
+
+We only called store.setValue on the store instance if the remote method call returned a non-error value since we don't want the client and server side data to get out-of-sync.
