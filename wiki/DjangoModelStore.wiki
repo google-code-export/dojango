@@ -317,47 +317,50 @@ The `to_python()` method accepts one optional argument, `objects`.
 >>>
 }}}
 
-If an objects argument is passed, then those objects will be used to fill the store, but ONLY during that iteration.  The previous objects setting will be restored when serialization is finished.  This is useful if you want to create separate and independent data structures (client-side stores) based on some subset of data.
+If an `objects` argument is passed, then those objects will be used to fill the store, but ONLY during that iteration.  The previous `objects` setting will be restored when serialization is finished.  This is useful if you want to create separate and independent data structures (client-side stores) based on some subset of data.
 
+{{{
 >>> store = UserStore()
 >>> staff_store = store.to_python( objects=User.objects.filter(is_staff=True) )
->>> user_store =  store.to_python( objects=User.objects.filter(is_staff=False) )
+>>> user_store = store.to_python( objects=User.objects.filter(is_staff=False) )
 >>>
+}}}
 
-This example is somewhat unnecessary since we could just add an is_staff field to the Store definition and let the filtering happen dynamically, but you get the idea.
+This example is somewhat unnecessary since we could just add an `is_staff` field to the `Store` definition and let the filtering happen dynamically, but you get the idea.
 
-The to_python() method returns the data serialized as a native Python object, (dict usually).
+The `to_python()` method returns the data serialized as a native Python object, (`dict` usually).
 
-The to_json method
-to_json is exactly like to_python except it accepts more than just an objects argument, and returns a JSON-encoded version of the final data structure.  Any argument passed to to_json (other than the keyword arg objects) is passed to simplejson.dumps().  This is useful if you want to provide special JSON serialization parameters or use a custom JSON encoder, (like Django's DjangoJSONEncoder in the django.core.serializers package.)
+===== The to_json method =====
 
-By default, a Store's __str__() and __repr__() methods both return the output of to_json().
+`to_json` is exactly like `to_python` except that it accepts more than just an `objects` argument, and returns a JSON-encoded version of the final data structure.  Any argument passed to `to_json` (other than the keyword arg `objects`) is passed to `simplejson.dumps()`.  This is useful if you want to provide special JSON serialization parameters or use a custom JSON encoder like Django's `DjangoJSONEncoder` in the `django.core.serializers` package.
 
+By default, a Store's `__str__()` method returns the output of `to_json()`.
 
-Meta (options)
-The inner Meta class is exactly like Django's Meta class on Model definitions.  It serves to hold store-wide configuration options.  The following options are available:
+= Meta (options) =
 
-    * objects
-          o The list (or any iterable ie QuerySet) of objects that will fill the store
-    * stores
-          o One or more Store objects that will be combined into this store.
-          o See Combining Stores for details
-    * label
-          o The field in the store that will serve as an item's label attribute.
-          o If label = None, then no label attribute will be set.
-          o A custom label can be given that does not correspond to a field.  In that case, the get_label method will determine the value.
-    * identifier
-          o identifier is different than label in that it should not collide with an existing store field.  This field is used to uniquely identify an item.  The default get_identifier method just returns a string of the form: <app>.<model>__<pk>
+The inner `Meta` class is exactly like Django's `Meta` class on `Model` definitions.  It serves to hold store-wide configuration options.  The following options are available:
+
+    * `objects`
+          * The list (or any iterable ie `QuerySet`) of objects that will fill the store
+    * `stores`
+          * One or more `Store` objects that will be combined into this store.
+          * See Combining Stores for details
+    * `label`
+          * The field in the store that will serve as an item's `label` attribute.
+          * If `label = None`, then no `label` attribute will be set.
+          * A custom `label` can be given that does not correspond to a field.  In that case, the store's `get_label` method will determine the value.
+    * `identifier`
+          * `identifier` is different than `label` in that it should not collide with an existing store field.  This field is used to uniquely identify an item.  The default `get_identifier` method just returns a string of the form: `<app>.<model>__<pk>`
     * service
-          o An instance of modelstore.services.BaseService
-          o By default, every Store instance gets a JsonService (which wont be used if no service methods are defined.)
+          * An instance of `dojango.data.modelstore.services.BaseService`
           o This will serve as the service method dispatcher (if service methods are used)
           o See Services for details
 
-All of these options can be accessed or set at runtime with the get_option and set_option Store methods.
+All of these options can be accessed or set at runtime with the `get_option` and `set_option` `Store` methods.
 
 
-Combining Stores
+= Combining Stores =
+
 If is often useful to combine the serialized data of two or more stores into one single data structure for consumption by the client.  This is actually required in order to use ReferenceFields effectively when the references span objects of more than one 'type' – such as referencing two separate Django models via ForeignKey, ManyToManyField, etc.  In order for Dojo to recognize a referenced item, that item must be in the same store as the item that references it.
 
 Here's an example:
