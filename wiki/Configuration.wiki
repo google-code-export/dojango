@@ -22,7 +22,7 @@ Sets the dojango profile, that should be used within the dojango context. Possib
   * "local_release"
   * "local_release_uncompressed"
 
-==DOJANGO_DOJO_VERSION (default "1.3.1")==
+==DOJANGO_DOJO_VERSION (default "1.5.0")==
 
 This setting defines the dojo version that should be used within dojango. For the local
 version you can pass in any value, because dojango tries to get a local version from
@@ -34,6 +34,13 @@ If you want to use a version of the profiles local or local_release you first ha
 
 All other external (crossdomain) builds provide the following versions:
 
+  * "1.5.0" - available in profile: aol, aol_compressed and google profiles
+  * "1.5" - available in profile: aol, aol_compressed and google profiles
+  * "1.4.3" - available in profile: aol, aol_compressed and google profiles
+  * "1.4.1" - available in profile: aol, aol_compressed and google profiles
+  * "1.4.0" - available in profile: aol, aol_compressed and google profiles
+  * "1.4" - available in profile: aol, aol_compressed and google profiles
+  * "1.3.2" - available in profile: aol, aol_compressed and google profiles
   * "1.3.1" - available in profile: aol, aol_compressed and google profiles
   * "1.3.0" - available in profile: aol, aol_compressed and google profiles
   * "1.2.0" - available in profile: aol, aol_compressed and google profiles
@@ -49,10 +56,11 @@ With this setting you can extend the default list of profiles delivered with
 dojango (see above). Loot at *conf/settings.py* on how to define your own
 profile.
 
-==DOJANGO_DOJO_THEME (default: "tundra")==
+==DOJANGO_DOJO_THEME (default: "claro")==
 
 Here you can define the dojo theme, that should be used. Possible values:
 
+  * "claro"
   * "tundra"
   * "soria"
   * "nihilo"
