@@ -8,7 +8,7 @@ Dojango was designed to get started very fast, but you also have the power to co
 everything on your own (just if you really want to :-)). All the definitions below
 can be set in your project's *settings.py* file:
 
-==DOJANGO_DOJO_PROFILE (default "aol")==
+==DOJANGO_DOJO_PROFILE (default "google")==
 
 Sets the dojango profile, that should be used within the dojango context. Possible values:
 
